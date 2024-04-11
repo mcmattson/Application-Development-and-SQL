@@ -35,4 +35,16 @@ function displaySearchResult(users) {
     }
 }
 
+function addUser(user) {
+    addUserResultDiv.textContent = "Add User Results.";
+}
+
+function updateUser(user) {
+    updateUserResultDiv.textContent = "Update Results.";
+}
+
+function deleteUser(user) {
+    deleteUserResultDiv.textContent = "Delete Results.";
+}
+
 
