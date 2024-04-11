@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management System</title>
+</head>
+<body>
+    <h1>User Management System</h1>
+    <div>
+        <h2>Search for Users</h2>
+        <input type="text" id="searchInput" placeholder="Enter user name">
+        <button onclick="searchUsers()">Search</button>
+        <div id="searchResult"></div>
+    </div>
+    <div>
+        <h2>Add New User</h2>
+        <input type="text" id="newUserID" placeholder="Enter user ID">
+        <input type="text" id="newUserName" placeholder="Enter user name">
+        <input type="text" id="newUserType" placeholder="Enter user type">
+        <button onclick="addUser()">Add User</button>
+        <div id="addUserResult"></div>
+    </div>
+    <div>
+        <h2>Update User</h2>
+        <input type="text" id="oldUserID" placeholder="Old User ID">
+        <input type="text" id="updateUserName" placeholder="New User Name">
+        <input type="text" id="updateUserType" placeholder="New User Type">
+        <button onclick="updateUser()">Update User</button>
+        <div id="updateUserResult"></div>
+    </div>
+    <div>
+        <h2>Delete User</h2>
+        <input type="text" id="deleteUserID" placeholder="Enter user ID">
+        <button onclick="deleteUser()">Delete User</button>
+        <div id="deleteUserResult"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
