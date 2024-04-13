@@ -5,7 +5,7 @@ function searchUsers() {
         return;
     }
 
-    fetch('/search?userName=' + searchInput)
+    fetch('/WebAssignment/search?userName=' + searchInput)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');

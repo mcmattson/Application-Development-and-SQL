@@ -19,12 +19,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/search")
+@WebServlet("/WebAssignment/search")
 public class UserSearchServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // JDBC URL, username, and password
-    private static final String JDBC_URL = "jdbc:mysql://faure.cs.colostate.edu:3306/mmattson";
+    private static final String JDBC_URL = "jdbc:mysql://faure.cs.colostate.edu:3306/mmattson/mmattson";
     private static final String JDBC_USERNAME = "mmattson";
     private static final String JDBC_PASSWORD = "829587718";
 
@@ -39,7 +39,7 @@ public class UserSearchServlet extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
+            System.err.println("Driver Error");
             e.printStackTrace();
         }
 
@@ -68,6 +68,9 @@ public class UserSearchServlet extends HttpServlet {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "An error occurred while processing your request.");
+
         } finally {
             // Close resources
             try {
