@@ -5,7 +5,7 @@ function searchUsers() {
         return;
     }
 
-    fetch('/WebAssignment/search?userName=' + searchInput)
+    fetch('/search?userName=' + searchInput)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -54,7 +54,7 @@ function addUser() {
         return;
     }
 
-    fetch('/WebAssignment/addUser?newUserID=' + newUserID + '?newUserName=' + newUserName + '?newUserType=' + newUserType)
+    fetch('/addUser?newUserID=' + newUserID + '?newUserName=' + newUserName + '?newUserType=' + newUserType)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -103,7 +103,7 @@ function updateUser() {
         return;
     }
 
-    fetch('/WebAssignment/updateUser?oldUserID=' + oldUserID + '?updateUserName=' + updateUserName + '?updateUserType=' + updateUserType)
+    fetch('/updateUser?oldUserID=' + oldUserID + '?updateUserName=' + updateUserName + '?updateUserType=' + updateUserType)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -140,7 +140,7 @@ function deleteUser() {
         return;
     }
 
-    fetch('/WebAssignment/delete?userID=' + deleteUserID)
+    fetch('/delete?userID=' + deleteUserID)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
