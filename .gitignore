@@ -22,7 +22,5 @@
 hs_err_pid*
 replay_pid*
 
-lib
-settings.json
-*.xml
-pom.*
+resources
+target
