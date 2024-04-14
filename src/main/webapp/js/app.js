@@ -18,15 +18,15 @@ function searchUsers() {
     .catch((error) => console.error("Error:", error));
 }
 
-function displaySearchResult(users) {
+function displaySearchResult(data) {
   var searchResultDiv = document.getElementById("searchResult");
   searchResultDiv.innerHTML = "";
 
-  if (users.length === 0) {
+  if (data.length === 0) {
     searchResultDiv.textContent = "No users found.";
   } else {
     var userList = document.createElement("ul");
-    users.forEach((user) => {
+    data.forEach((user) => {
       var listItem = document.createElement("li");
       listItem.textContent = user.userName + " - " + user.userType; // Update property names according to the backend
       userList.appendChild(listItem);
@@ -55,10 +55,12 @@ function addUser() {
   }
 
   fetch(
-    `/user-management/addUser?userID=${newUserID}&userName=${newUserName}&userType=${newUserType}`,
-    {
-      method: "POST",
-    }
+    "/user-management/addUser?userID=" +
+      newUserID +
+      "&userName=" +
+      newUserName +
+      "&userType=" +
+      newUserType
   )
     .then((response) => {
       if (!response.ok) {
@@ -67,17 +69,26 @@ function addUser() {
       return response.json();
     })
     .then((data) => {
-      displaySearchResult(data);
+      displayAddUserResult(data);
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function displayAddUserResult(data) {
   var addUserResultDiv = document.getElementById("addUserResult");
-  addUserResultDiv.innerHTML = ""; // Clear previous results
+  addUserResultDiv.innerHTML = "";
 
-  // Since response is a plain message
-  addUserResultDiv.textContent = data;
+  if (data.length === 0) {
+    addUserResultDiv.textContent = "No users found.";
+  } else {
+    var userList = document.createElement("ul");
+    data.forEach((user) => {
+      var listItem = document.createElement("li");
+      listItem.textContent = user.userName + " - " + user.userType; // Update property names according to the backend
+      userList.appendChild(listItem);
+    });
+    addUserResultDiv.appendChild(userList);
+  }
 }
 
 // ---------//

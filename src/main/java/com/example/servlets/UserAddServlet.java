@@ -7,6 +7,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.model.User;
 import com.google.gson.Gson;
 
 import jakarta.servlet.ServletException;
@@ -24,59 +28,64 @@ public class UserAddServlet extends HttpServlet {
     private static final String JDBC_USERNAME = "mmattson";
     private static final String JDBC_PASSWORD = "829587718";
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-
         String userName = request.getParameter("userName");
         String userID = request.getParameter("userID");
-        String newUserType = request.getParameter("newUserType");
+        List<User> searchResult = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Driver Error");
+            e.printStackTrace();
+        }
+
+        try {
+            // Establish database connection
             connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
 
-            // Check if user exists
-            String sql = "SELECT * FROM Users WHERE UserName LIKE ? OR UserID = ?";
+            // Prepare SQL statement
+            String sql = "SELECT * FROM Users WHERE UserID = ? OR UserName LIKE ?";
             statement = connection.prepareStatement(sql);
-            statement.setString(1, userID);
-            statement.setString(2, userName);
+            statement.setString(1, "%" + userID + "%");
+            statement.setString(2, "%" + userName + "%");
 
+            // Execute query
             resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
-                out.print(new Gson().toJson("User already exists in the database."));
-            } else {
-                // Add user to the database
-                sql = "INSERT INTO Users (UserID, UserName, UserType) VALUES (?, ?, ?)";
-                statement = connection.prepareStatement(sql);
-                statement.setString(1, userID);
-                statement.setString(2, userName);
-                statement.setString(3, newUserType);
-                int result = statement.executeUpdate();
-
-                if (result > 0) {
-                    out.print(new Gson().toJson("User added successfully."));
-                } else {
-                    out.print(new Gson().toJson("Failed to add user."));
-                }
+            // Process result set
+            while (resultSet.next()) {
+                int userId = resultSet.getInt("UserID");
+                String name = resultSet.getString("UserName");
+                String userType = resultSet.getString("UserType");
+                // Create User object and add to search result
+                User user = new User(userId, name, userType);
+                searchResult.add(user);
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "An error occurred while processing your request.");
+
         } finally {
             // Close resources
             try {
                 if (resultSet != null)
                     resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
                 if (statement != null)
                     statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
                 if (connection != null)
                     connection.close();
             } catch (SQLException e) {
@@ -84,6 +93,14 @@ public class UserAddServlet extends HttpServlet {
             }
         }
 
+        // Convert searchResult to JSON and send as response
+        Gson gson = new Gson();
+        String jsonResult = gson.toJson(searchResult);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(jsonResult);
         out.flush();
     }
 }
