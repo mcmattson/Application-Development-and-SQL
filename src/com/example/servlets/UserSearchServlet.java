@@ -24,7 +24,7 @@ public class UserSearchServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // JDBC URL, username, and password
-    private static final String JDBC_URL = "jdbc:mysql://faure.cs.colostate.edu:3306/mmattson/mmattson";
+    private static final String JDBC_URL = "jdbc:mysql://faure.cs.colostate.edu:3306/mmattson";
     private static final String JDBC_USERNAME = "mmattson";
     private static final String JDBC_PASSWORD = "829587718";
 
