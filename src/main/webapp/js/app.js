@@ -37,58 +37,48 @@ function displaySearchResult(data) {
 // ---------//
 function addUser() {
   var newUserID = document.getElementById("newUserID").value.trim();
+  var newUserName = document.getElementById("newUserName").value.trim();
+  var newUserType = document.getElementById("newUserType").value.trim();
+
   if (newUserID === "") {
     alert("Please enter a user ID to add.");
     return;
   }
 
-  var newUserName = document.getElementById("newUserName").value.trim();
   if (newUserName === "") {
     alert("Please enter a user name to add.");
     return;
   }
 
-  var newUserType = document.getElementById("newUserType").value.trim();
   if (newUserType === "") {
     alert("Please enter Administrator, Visitor, or Regular for User Type.");
     return;
   }
 
   fetch(
-    "/user-management/addUser?userID=" +
-      newUserID +
-      "&userName=" +
-      newUserName +
-      "&userType=" +
-      newUserType
+    `/user-management/addUser?userID=${newUserID}&userName=${newUserName}&userType=${newUserType}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userID: newUserID,
+        userName: newUserName,
+        userType: newUserType,
+      }),
+    }
   )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((data) => {
       displayAddUserResult(data);
     })
     .catch((error) => console.error("Error:", error));
 }
 
-function displayAddUserResult(data) {
+function displayAddUserResult(message) {
   var addUserResultDiv = document.getElementById("addUserResult");
-  addUserResultDiv.innerHTML = "";
-
-  if (data.length === 0) {
-    addUserResultDiv.textContent = "No users found.";
-  } else {
-    var userList = document.createElement("ul");
-    data.forEach((user) => {
-      var listItem = document.createElement("li");
-      listItem.textContent = user.userName + " - " + user.userType; // Update property names according to the backend
-      userList.appendChild(listItem);
-    });
-    addUserResultDiv.appendChild(userList);
-  }
+  addUserResultDiv.textContent = message;
 }
 
 // ---------//

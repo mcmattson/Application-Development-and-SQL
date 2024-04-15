@@ -5,12 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.example.model.User;
 import com.google.gson.Gson;
 
 import jakarta.servlet.ServletException;
@@ -23,19 +18,18 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UserAddServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // JDBC URL, username, and password
     private static final String JDBC_URL = "jdbc:mysql://faure.cs.colostate.edu:3306/mmattson";
     private static final String JDBC_USERNAME = "mmattson";
     private static final String JDBC_PASSWORD = "829587718";
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         String userName = request.getParameter("userName");
         String userID = request.getParameter("userID");
-        List<User> searchResult = new ArrayList<>();
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        String userType = request.getParameter("userType");
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -44,63 +38,37 @@ public class UserAddServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        try {
-            // Establish database connection
-            connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
+                PreparedStatement statement = connection
+                        .prepareStatement("INSERT INTO Users (UserID, UserName, UserType) VALUES (?, ?, ?)")) {
 
-            // Prepare SQL statement
-            String sql = "SELECT * FROM Users WHERE UserID = ? OR UserName LIKE ?";
-            statement = connection.prepareStatement(sql);
-            statement.setString(1, "%" + userID + "%");
-            statement.setString(2, "%" + userName + "%");
+            statement.setString(1, userID);
+            statement.setString(2, userName);
+            statement.setString(3, userType);
 
-            // Execute query
-            resultSet = statement.executeQuery();
-
-            // Process result set
-            while (resultSet.next()) {
-                int userId = resultSet.getInt("UserID");
-                String name = resultSet.getString("UserName");
-                String userType = resultSet.getString("UserType");
-                // Create User object and add to search result
-                User user = new User(userId, name, userType);
-                searchResult.add(user);
+            int result = statement.executeUpdate();
+            try (PrintWriter out = response.getWriter()) {
+                if (result > 0) {
+                    out.print(new Gson().toJson("User added successfully."));
+                } else {
+                    out.print(new Gson().toJson("Failed to add user."));
+                }
+                out.flush();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "An error occurred while processing your request.");
-
-        } finally {
-            // Close resources
-            try {
-                if (resultSet != null)
-                    resultSet.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            log("SQL Error: ", e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try (PrintWriter out = response.getWriter()) {
+                out.print(new Gson().toJson("An error occurred while processing your request: " + e.getMessage()));
+                out.flush();
             }
-            try {
-                if (statement != null)
-                    statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+        } catch (Exception e) {
+            log("General Error: ", e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try (PrintWriter out = response.getWriter()) {
+                out.print(new Gson().toJson("An unexpected error occurred: " + e.getMessage()));
+                out.flush();
             }
         }
-
-        // Convert searchResult to JSON and send as response
-        Gson gson = new Gson();
-        String jsonResult = gson.toJson(searchResult);
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.print(jsonResult);
-        out.flush();
     }
 }
