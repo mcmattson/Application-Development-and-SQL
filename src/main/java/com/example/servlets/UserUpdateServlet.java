@@ -27,9 +27,9 @@ public class UserUpdateServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        String userName = request.getParameter("userName");
-        String userID = request.getParameter("userID");
-        String userType = request.getParameter("userType");
+        String userName = request.getParameter("updateUserName");
+        String userID = request.getParameter("oldUserID");
+        String userType = request.getParameter("updateUserType");
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -51,7 +51,8 @@ public class UserUpdateServlet extends HttpServlet {
                 if (result > 0) {
                     out.print(new Gson().toJson("User Updated successfully."));
                 } else {
-                    out.print(new Gson().toJson("No User with specified ID found. Failed to update user."));
+                    out.print(new Gson()
+                            .toJson("No User with specified ID (" + userID + ") found. Failed to update user."));
                 }
                 out.flush();
             }
