@@ -190,3 +190,21 @@ function clearAllResults() {
     div.style.display = "none"; // Hide all result divs initially
   });
 }
+
+function toggleDarkMode() {
+  const body = document.body;
+  body.classList.toggle("dark-mode");
+  // Save the current mode in localStorage
+  localStorage.setItem("darkMode", body.classList.contains("dark-mode"));
+}
+
+// Function to check the saved theme in localStorage and apply it
+function applyInitialTheme() {
+  const darkMode = localStorage.getItem("darkMode") === "true";
+  if (darkMode) {
+    document.body.classList.add("dark-mode");
+  }
+}
+
+// Call applyInitialTheme when the document loads
+document.addEventListener("DOMContentLoaded", applyInitialTheme);
