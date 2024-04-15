@@ -49,17 +49,23 @@ public class UserAddServlet extends HttpServlet {
             int result = statement.executeUpdate();
             try (PrintWriter out = response.getWriter()) {
                 if (result > 0) {
-                    out.print(new Gson().toJson("User added successfully."));
+                    out.print(new Gson().toJson(
+                            "SUCCESS: User: " + userID + " - " + userName + " - " + userType + " has been added."));
                 } else {
-                    out.print(new Gson().toJson("Failed to add user."));
+                    out.print(new Gson()
+                            .toJson("ERROR: Failed to add User: " + userID + " - " + userName + " - " + userType
+                                    + "."));
                 }
                 out.flush();
             }
         } catch (SQLException e) {
-            log("SQL Error: ", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            String errorMessage = "An unexpected error occurred.";
+            if (e.getErrorCode() == 1062) {
+                errorMessage = "ERROR: " + userID + " has already been entered.";
+            }
             try (PrintWriter out = response.getWriter()) {
-                out.print(new Gson().toJson("An error occurred while processing your request: " + e.getMessage()));
+                out.print(new Gson().toJson(errorMessage));
                 out.flush();
             }
         } catch (Exception e) {

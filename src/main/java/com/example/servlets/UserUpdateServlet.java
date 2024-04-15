@@ -49,10 +49,11 @@ public class UserUpdateServlet extends HttpServlet {
             int result = statement.executeUpdate();
             try (PrintWriter out = response.getWriter()) {
                 if (result > 0) {
-                    out.print(new Gson().toJson("User Updated successfully."));
+                    out.print(new Gson().toJson(
+                            "SUCCESS: User: " + userID + " - " + userName + " - " + userType + " has been updated."));
                 } else {
                     out.print(new Gson()
-                            .toJson("No User with specified ID (" + userID + ") found. Failed to update user."));
+                            .toJson("ERROR: " + userID + "was not found. Record Update Unsuccessful."));
                 }
                 out.flush();
             }

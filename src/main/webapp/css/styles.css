@@ -1,0 +1,181 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    /* Sets a nice, readable font */
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Centers all children (sections) horizontally */
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.section {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    /* Adds a border around each section */
+    border-radius: 5px;
+    /* Slightly rounds corners of the border */
+    width: 50%;
+    /* Adjust width as needed, or use max-width for responsiveness */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Optional: adds shadow for better focus */
+    background-color: #f9f9f9;
+    /* Light background color for the sections */
+}
+
+.section2 {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    /* Adds a border around each section */
+    border-radius: 5px;
+    /* Slightly rounds corners of the border */
+    width: 50%;
+    /* Adjust width as needed, or use max-width for responsiveness */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Optional: adds shadow for better focus */
+    background-color: #f9f9f9;
+    /* Light background color for the sections */
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* Adds space between flex items */
+    align-items: center;
+    /* Vertically aligns flex items in the middle */
+    justify-content: space-between;
+    /* Adjusts spacing to push elements to edges */
+}
+
+.flex-container2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* Adds space between flex items */
+    align-items: center;
+    /* Vertically aligns flex items in the middle */
+    justify-content: space-between;
+    /* Adjusts spacing to push elements to edges */
+}
+
+input {
+    padding: 10px;
+    min-width: 150px;
+    height: 50px;
+}
+.flex-container input[type="text"] {
+    flex: 3;
+}
+
+.flex-container2 input[type="text"] {
+    flex-grow: 1;
+}
+
+button {
+    padding: 10px 15px;
+    /* Padding inside the buttons */
+    width: auto;
+    /* Adjusts width to accommodate flex settings */
+    height: 48px;
+    /* Uniform height for all buttons */
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    /* No borders */
+    border-radius: 5px;
+    /* Rounded corners */
+    border-radius: 0;
+    text-align: center;
+    /* Center the text inside the button */
+    line-height: 28px;
+    /* Center text vertically, adjust according to your font size */
+    font-size: 14px;
+    /* Font size of the text inside the button */
+    cursor: pointer;
+    /* Cursor indicates clickable item */
+}
+
+.flex-container2 button {
+    flex: 8;
+}
+
+.flex-container button {
+    flex: 1;
+}
+
+button:hover {
+    background-color: #0056b3;
+    /* Darkens button on hover for visual feedback */
+}
+
+#searchResult,
+#addUserResult,
+#updateUserResult,
+#deleteUserResult {
+    display: none;
+    margin-top: 10px;
+    text-align: left;
+    /* Ensures text within results div is left-aligned */
+}
+
+#searchResult,
+#addUserResult,
+#updateUserResult,
+#deleteUserResult {    width: 80%;
+    /* Match the width of your form sections */
+    margin: 10px auto;
+    /* Center it horizontally */
+    padding: 10px;
+    /* Padding for internal spacing */
+    background-color: #f9f9f9;
+    /* Light background for the list */
+    border: 1px solid #ccc;
+    /* Subtle border similar to input fields */
+    border-radius: 5px;
+    /* Slight rounding of corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Soft shadow for depth */
+    display: none;
+    /* Initially hidden */
+}
+
+#searchResult ul,
+#addUserResult ul,
+#updateUserResult ul,
+#deleteUserResult ul {    list-style: none;
+    /* Removes default list styling */
+    padding: 0;
+    margin: 0;
+}
+
+#searchResult li,
+#addUserResult li,
+#updateUserResult li,
+#deleteUserResult li {    padding: 8px 10px;
+    /* Uniform padding for each list item */
+    border-bottom: 1px solid #eee;
+    /* Subtle separator for items */
+}
+
+#searchResult li:last-child,
+#addUserResult li:last-child,
+#updateUserResult li:last-child,
+#deleteUserResult li:last-child {    border-bottom: none;
+    /* Remove border for the last item */
+}
+
+#searchResult li:hover,
+#addUserResult li:hover,
+#updateUserResult li:hover,
+#deleteUserResult li:hover {    background-color: #e6e6e6;
+    /* Light hover effect for interactivity */
+}
