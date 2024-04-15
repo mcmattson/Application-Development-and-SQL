@@ -84,47 +84,50 @@ function displayAddUserResult(message) {
 // ---------//
 function updateUser() {
   var oldUserID = document.getElementById("oldUserID").value.trim();
+  var updateUserName = document.getElementById("updateUserName").value.trim();
+  var updateUserType = document.getElementById("updateUserType").value.trim();
+
   if (oldUserID === "") {
-    alert("Please enter a old user ID to update.");
+    alert("Please enter the user ID to update.");
     return;
   }
 
-  var updateUserName = document.getElementById("updateUserName").value.trim();
   if (updateUserName === "") {
     alert("Please enter a user name to update.");
     return;
   }
 
-  var updateUserType = document.getElementById("updateUserType").value.trim();
   if (updateUserType === "") {
-    alert("Please enter a user type to update.");
+    alert("Please enter Administrator, Visitor, or Regular for User Type.");
     return;
   }
 
   fetch(
-    `/user-management/updateUser?oldUserID=${oldUserID}?updateUserName=${updateUserName}?updateUserType=${updateUserType}`
+    `/user-management/updateUser?oldUserID=${oldUserID}&updateUserName=${updateUserName}&updateUserType=${updateUserType}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        oldUserID: oldUserID,
+        updateUserName: updateUserName,
+        updateUserType: updateUserType,
+      }),
+    }
   )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((data) => {
-      displayUpdateResult(data);
+      displayUpdateUserResult(data);
     })
     .catch((error) => console.error("Error:", error));
 }
 
-function displayUpdateResult(users) {
+function displayUpdateUserResult(message) {
   var updateUserResultDiv = document.getElementById("updateUserResult");
-  updateUserResultDiv.innerHTML = "";
-
-  updateUserResultDiv.innerHTML = ""; // Clear previous results
-
-  // Since response is a plain message
-  updateUserResultDiv.textContent = data;
+  updateUserResultDiv.textContent = message;
 }
+
 // ----- //
 function deleteUser() {
   var deleteUserID = document.getElementById("deleteUserID").value.trim();
