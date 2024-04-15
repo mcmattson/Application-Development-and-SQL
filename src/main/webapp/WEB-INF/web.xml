@@ -29,6 +29,18 @@
         <url-pattern>/addUser</url-pattern>
     </servlet-mapping>
 
+    <!-- Define the UserDeleteServlet -->
+    <servlet>
+        <servlet-name>UserDeleteServlet</servlet-name>
+        <servlet-class>com.example.servlets.UserDeleteServlet</servlet-class>
+    </servlet>
+
+    <!-- Map the UserDeleteServlet to /addUser -->
+    <servlet-mapping>
+        <servlet-name>UserDeleteServlet</servlet-name>
+        <url-pattern>/deleteUser</url-pattern>
+    </servlet-mapping>
+
     <!-- If you want to define a welcome file -->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
