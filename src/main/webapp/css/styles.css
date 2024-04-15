@@ -121,7 +121,64 @@ button:hover {
 #searchResult li:hover,#addUserResult li:hover,#updateUserResult li:hover, #deleteUserResult li:hover {
     background-color: #e6e6e6;
 }
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity for darkening effect */
+}
 
+.modal-content {
+    display: flex;
+    /* Using flexbox */
+    flex-direction: column;
+    /* Stack children vertically */
+    justify-content: space-between;
+    /* Space between content and footer */
+    background-color: #fefefe;
+    margin: 0;
+    /* Remove auto margins */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 350px;
+    /* Exact width */
+    height: 350px;
+    /* Exact height */
+    position: absolute;
+    /* Absolute positioning to easily center */
+    top: 50%;
+    /* Position at 50% of viewport height */
+    left: 50%;
+    /* Position at 50% of viewport width */
+    transform: translate(-50%, -50%);
+    /* Adjust position to center perfectly */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Add some depth with a shadow */
+}
+
+.btn-flat {
+    border: none;
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.btn-flat:hover {
+    background-color: #e0e0e0;
+}
 /* Dark mode styles */
 body.dark-mode {
     background-color: #121212;
@@ -167,4 +224,32 @@ body.dark-mode input {
 
 body.dark-mode input::placeholder {
     color: #ccc;
+}
+
+/* Base light mode styles already defined above */
+
+/* Dark mode specific styles */
+body.dark-mode .modal-content {
+    background-color: #333;
+    /* Darker background for modal */
+    color: #fff;
+    /* Light text for readability */
+}
+
+body.dark-mode .btn-flat {
+    background-color: #0056b3;
+    /* Dark mode button background */
+    color: #ccc;
+    /* Light color text for buttons */
+}
+
+body.dark-mode .btn-flat:hover {
+    background-color: #003a75;
+    /* Darker background on hover */
+}
+
+/* Ensure modal overlay is suitable for dark mode too */
+body.dark-mode .modal {
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Slightly darker background overlay */
 }
