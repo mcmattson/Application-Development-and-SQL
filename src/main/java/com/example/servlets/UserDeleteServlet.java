@@ -36,11 +36,6 @@ public class UserDeleteServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        if (userID == null || userID.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID is required");
-            return;
-        }
-
         try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
                 PreparedStatement statement = connection.prepareStatement("DELETE FROM Users WHERE UserID = ?")) {
 
@@ -51,9 +46,9 @@ public class UserDeleteServlet extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             if (result > 0) {
-                out.print(new Gson().toJson("User deleted successfully."));
+                out.print(new Gson().toJson("SUCCESS: User " + userID + " has been deleted."));
             } else {
-                out.print(new Gson().toJson("No user found with provided ID."));
+                out.print(new Gson().toJson("ERROR: No user found with provided ID: " + userID + "."));
             }
             out.flush();
         } catch (SQLException e) {

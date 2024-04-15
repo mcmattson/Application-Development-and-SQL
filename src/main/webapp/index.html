@@ -1,41 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management System</title>
+    <link rel="stylesheet" href="css/styles.css"> <!-- Add this line -->
 </head>
+
 <body>
     <h1>User Management System</h1>
-    <div>
+
+    <div class="section">
         <h2>Search for Users</h2>
-        <input type="text" id="searchInput" placeholder="Enter user name">
-        <button onclick="searchUsers()">Search</button>
+        <div class="flex-container">
+            <input type="text" id="searchInput" placeholder="Enter user name">
+            <button onclick="searchUsers()">Search</button>
+        </div>
         <div id="searchResult"></div>
     </div>
-    <div>
+
+    <div class="section2">
         <h2>Add New User</h2>
-        <input type="text" id="newUserID" placeholder="Enter user ID">
-        <input type="text" id="newUserName" placeholder="Enter user name">
-        <input type="text" id="newUserType" placeholder="Enter user type">
-        <button onclick="addUser()">Add User</button>
+        <div class="flex-container2">
+            <input type="text" id="newUserID" placeholder="Enter user ID">
+            <input type="text" id="newUserName" placeholder="Enter user name">
+            <input type="text" id="newUserType" placeholder="Enter user type">
+            <button onclick="addUser()">Add User</button>
+        </div>
         <div id="addUserResult"></div>
     </div>
-    <div>
+
+    <div class="section2">
         <h2>Update User</h2>
-        <input type="text" id="oldUserID" placeholder="Old User ID">
-        <input type="text" id="updateUserName" placeholder="New User Name">
-        <input type="text" id="updateUserType" placeholder="New User Type">
-        <button onclick="updateUser()">Update User</button>
+        <div class="flex-container2">
+            <input type="text" id="oldUserID" placeholder="Old User ID">
+            <input type="text" id="updateUserName" placeholder="New User Name">
+            <input type="text" id="updateUserType" placeholder="New User Type">
+            <button onclick="updateUser()">Update User</button>
+        </div>
         <div id="updateUserResult"></div>
     </div>
-    <div>
+
+    <div class="section">
         <h2>Delete User</h2>
-        <input type="text" id="deleteUserID" placeholder="Enter user ID">
-        <button onclick="deleteUser()">Delete User</button>
+        <div class="flex-container">
+            <input type="text" id="deleteUserID" placeholder="Enter user ID">
+            <button onclick="deleteUser()">Delete User</button>
+        </div>
         <div id="deleteUserResult"></div>
     </div>
 
     <script src="js/app.js"></script>
 </body>
-</html>

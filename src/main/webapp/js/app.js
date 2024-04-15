@@ -1,3 +1,8 @@
+var searchResultDiv = document.getElementById("searchResult");
+var addUserResultDiv = document.getElementById("addUserResult");
+var deleteUserResultDiv = document.getElementById("deleteUserResult");
+var updateUserResultDiv = document.getElementById("updateUserResult");
+
 function searchUsers() {
   var searchInput = document.getElementById("searchInput").value.trim();
   if (searchInput === "") {
@@ -19,16 +24,19 @@ function searchUsers() {
 }
 
 function displaySearchResult(data) {
-  var searchResultDiv = document.getElementById("searchResult");
   searchResultDiv.innerHTML = "";
+  addUserResultDiv.innerHTML = "";
+  updateUserResultDiv.innerHTML = "";
+  deleteUserResultDiv.innerHTML = "";
 
   if (data.length === 0) {
     searchResultDiv.textContent = "No users found.";
   } else {
+    searchResultDiv.style.display = "block";
     var userList = document.createElement("ul");
     data.forEach((user) => {
       var listItem = document.createElement("li");
-      listItem.textContent = user.userName + " - " + user.userType; // Update property names according to the backend
+      listItem.textContent = user.userName + " - " + user.userType;
       userList.appendChild(listItem);
     });
     searchResultDiv.appendChild(userList);
@@ -77,8 +85,14 @@ function addUser() {
 }
 
 function displayAddUserResult(message) {
-  var addUserResultDiv = document.getElementById("addUserResult");
-  addUserResultDiv.textContent = message;
+  // Clear all result divs to ensure no old messages are displayed
+  clearAllResults();
+  if (message) {
+    addUserResultDiv.textContent = message;
+    addUserResultDiv.style.display = "block"; // Show only if there is a message
+  } else {
+    addUserResultDiv.style.display = "none"; // Hide if no message
+  }
 }
 
 // ---------//
@@ -124,8 +138,13 @@ function updateUser() {
 }
 
 function displayUpdateUserResult(message) {
-  var updateUserResultDiv = document.getElementById("updateUserResult");
-  updateUserResultDiv.textContent = message;
+  clearAllResults();
+  if (message) {
+    updateUserResultDiv.textContent = message;
+    updateUserResultDiv.style.display = "block";
+  } else {
+    updateUserResultDiv.style.display = "none";
+  }
 }
 
 // ----- //
@@ -139,9 +158,9 @@ function deleteUser() {
   fetch(`/user-management/deleteUser?userID=${deleteUserID}`, {
     method: "DELETE",
   })
-    .then((response) => response.json()) // Always expect JSON response
+    .then((response) => response.json())
     .then((data) => {
-      displayDeleteResult(data); // Data should be a JSON string message
+      displayDeleteResult(data);
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -150,6 +169,24 @@ function deleteUser() {
 }
 
 function displayDeleteResult(message) {
-  var deleteUserResultDiv = document.getElementById("deleteUserResult");
-  deleteUserResultDiv.textContent = message; // Display JSON message
+  clearAllResults();
+  if (message) {
+    deleteUserResultDiv.textContent = message;
+    deleteUserResultDiv.style.display = "block";
+  } else {
+    deleteUserResultDiv.style.display = "none";
+  }
+}
+
+function clearAllResults() {
+  const resultDivs = [
+    searchResultDiv,
+    addUserResultDiv,
+    updateUserResultDiv,
+    deleteUserResultDiv,
+  ];
+  resultDivs.forEach((div) => {
+    div.innerHTML = "";
+    div.style.display = "none"; // Hide all result divs initially
+  });
 }
