@@ -129,27 +129,24 @@ function displayUpdateResult(users) {
 function deleteUser() {
   var deleteUserID = document.getElementById("deleteUserID").value.trim();
   if (deleteUserID === "") {
-    alert("Please enter a user name to delete.");
+    alert("Please enter a user ID to delete.");
     return;
   }
 
-  fetch("/user-management/deleteUser?userID=" + deleteUserID)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
+  fetch(`/user-management/deleteUser?userID=${deleteUserID}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json()) // Always expect JSON response
     .then((data) => {
-      displayDeleteResult(data);
+      displayDeleteResult(data); // Data should be a JSON string message
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => {
+      console.error("Error:", error);
+      displayDeleteResult("Network error occurred");
+    });
 }
 
-function displayDeleteResult(users) {
+function displayDeleteResult(message) {
   var deleteUserResultDiv = document.getElementById("deleteUserResult");
-  deleteUserResultDiv.innerHTML = "";
-
-  // Since response is a plain message
-  deleteUserResultDiv.textContent = data;
+  deleteUserResultDiv.textContent = message; // Display JSON message
 }
