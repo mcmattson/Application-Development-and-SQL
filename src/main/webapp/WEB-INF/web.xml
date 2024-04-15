@@ -29,6 +29,18 @@
         <url-pattern>/addUser</url-pattern>
     </servlet-mapping>
 
+    <!-- Define the UserUpdateServlet -->
+    <servlet>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <servlet-class>com.example.servlets.UserUpdateServlet</servlet-class>
+    </servlet>
+
+    <!-- Map the UserUpdateServlet to /search -->
+    <servlet-mapping>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <url-pattern>/updateUser</url-pattern>
+    </servlet-mapping>
+
     <!-- Define the UserDeleteServlet -->
     <servlet>
         <servlet-name>UserDeleteServlet</servlet-name>
