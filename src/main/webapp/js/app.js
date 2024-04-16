@@ -8,14 +8,23 @@ var addUpdateDeviceUsesResultsDiv = document.getElementById(
 
 function searchUsers() {
   var searchInput = document.getElementById("searchInput").value.trim();
+  var userID = document.getElementById("userID").value.trim(); // Assume you have an input with ID 'userID'
+  var startDate = document.getElementById("startDate").value.trim(); // Assume you have an input with ID 'startDate'
+  var endDate = document.getElementById("endDate").value.trim(); // Assume you have an input with ID 'endDate'
 
   clearAllResults();
-  if (searchInput === "") {
-    displaySearchResult([], "Please Enter the User Name to Search for.");
-    return;
+
+  // Construct the URL with query parameters for user name, user ID, and date range
+  var url = "/user-management/search?userName=" + searchInput;
+  if (userID) {
+    url += "&userID=" + userID;
+  }
+  if (startDate && endDate) {
+    url += "&startDate=" + startDate + "&endDate=" + endDate;
   }
 
-  fetch("/user-management/search?userName=" + searchInput)
+  // Use the constructed URL to perform the search
+  fetch(url)
     .then((response) => {
       if (!response.ok) {
         displaySearchResult([], "ERROR: Network error occurred");
@@ -26,7 +35,10 @@ function searchUsers() {
     .then((data) => {
       displaySearchResult(data);
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error(error);
+      displaySearchResult([], "ERROR: An error occurred while fetching data");
+    });
 }
 
 function displaySearchResult(data, message = "") {
@@ -46,6 +58,9 @@ function displaySearchResult(data, message = "") {
     searchResultDiv.appendChild(userList);
   }
 }
+
+// ... [rest of the existing app.js functions]
+
 // ---------//
 function addUser() {
   var newUserID = document.getElementById("newUserID").value.trim();
