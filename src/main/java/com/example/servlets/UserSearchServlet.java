@@ -9,9 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.example.model.User;
 import com.google.gson.Gson;
+import com.example.util.DBConfig;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,11 +23,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UserSearchServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // JDBC URL, username, and password
-    private static final String JDBC_URL = "jdbc:mysql://faure.cs.colostate.edu:3306/mmattson";
-    private static final String JDBC_USERNAME = "mmattson";
-    private static final String JDBC_PASSWORD = "829587718";
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userName = request.getParameter("userName");
@@ -37,7 +32,7 @@ public class UserSearchServlet extends HttpServlet {
         ResultSet resultSet = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(DBConfig.getDriver());
         } catch (ClassNotFoundException e) {
             System.err.println("Driver Error");
             e.printStackTrace();
@@ -45,7 +40,8 @@ public class UserSearchServlet extends HttpServlet {
 
         try {
             // Establish database connection
-            connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
+            connection = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUsername(),
+                    DBConfig.getPassword());
 
             // Prepare SQL statement
             String sql = "SELECT * FROM Users WHERE UserName LIKE ?";
