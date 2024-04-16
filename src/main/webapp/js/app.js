@@ -5,34 +5,35 @@ var updateUserResultDiv = document.getElementById("updateUserResult");
 
 function searchUsers() {
   var searchInput = document.getElementById("searchInput").value.trim();
+
+  clearAllResults();
   if (searchInput === "") {
-    alert("Please enter a user name to search.");
+    displaySearchResult([], "Please Enter the User Name to Search for.");
     return;
   }
 
   fetch("/user-management/search?userName=" + searchInput)
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        displaySearchResult([], "ERROR: Network error occurred");
+        throw new Error("Network error occurred");
       }
       return response.json();
     })
     .then((data) => {
       displaySearchResult(data);
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => console.error(error));
 }
 
-function displaySearchResult(data) {
-  searchResultDiv.innerHTML = "";
-  addUserResultDiv.innerHTML = "";
-  updateUserResultDiv.innerHTML = "";
-  deleteUserResultDiv.innerHTML = "";
-
-  if (data.length === 0) {
+function displaySearchResult(data, message = "") {
+  clearAllResults();
+  searchResultDiv.style.display = "block";
+  if (message) {
+    searchResultDiv.textContent = message;
+  } else if (data.length === 0) {
     searchResultDiv.textContent = "No users found.";
   } else {
-    searchResultDiv.style.display = "block";
     var userList = document.createElement("ul");
     data.forEach((user) => {
       var listItem = document.createElement("li");
@@ -48,18 +49,22 @@ function addUser() {
   var newUserName = document.getElementById("newUserName").value.trim();
   var newUserType = document.getElementById("newUserType").value.trim();
 
+  clearAllResults();
+
   if (newUserID === "") {
-    alert("Please enter a user ID to add.");
+    displayAddUserResult("Please Enter the User ID.");
     return;
   }
 
   if (newUserName === "") {
-    alert("Please enter a user name to add.");
+    displayAddUserResult("Please Enter the User Name.");
     return;
   }
 
   if (newUserType === "") {
-    alert("Please enter Administrator, Visitor, or Regular for User Type.");
+    displayAddUserResult(
+      "Please enter Administrator, Visitor, or Regular for User Type."
+    );
     return;
   }
 
@@ -77,21 +82,26 @@ function addUser() {
       }),
     }
   )
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        displayAddUserResult("ERROR: Network error occurred");
+        throw new Error("Network error occurred");
+      }
+      return response.json();
+    })
     .then((data) => {
       displayAddUserResult(data);
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => console.error(error));
 }
 
 function displayAddUserResult(message) {
-  // Clear all result divs to ensure no old messages are displayed
   clearAllResults();
   if (message) {
     addUserResultDiv.textContent = message;
-    addUserResultDiv.style.display = "block"; // Show only if there is a message
+    addUserResultDiv.style.display = "block";
   } else {
-    addUserResultDiv.style.display = "none"; // Hide if no message
+    addUserResultDiv.style.display = "none";
   }
 }
 
@@ -101,18 +111,21 @@ function updateUser() {
   var updateUserName = document.getElementById("updateUserName").value.trim();
   var updateUserType = document.getElementById("updateUserType").value.trim();
 
+  clearAllResults();
   if (oldUserID === "") {
-    alert("Please enter the user ID to update.");
+    displayUpdateUserResult("Please Enter the User ID.");
     return;
   }
 
   if (updateUserName === "") {
-    alert("Please enter a user name to update.");
+    displayUpdateUserResult("Please Enter the User Name.");
     return;
   }
 
   if (updateUserType === "") {
-    alert("Please enter Administrator, Visitor, or Regular for User Type.");
+    displayUpdateUserResult(
+      "Please enter Administrator, Visitor, or Regular for User Type."
+    );
     return;
   }
 
@@ -130,11 +143,17 @@ function updateUser() {
       }),
     }
   )
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        displayUpdateUserResult("ERROR: Network error occurred");
+        throw new Error("Network error occurred");
+      }
+      return response.json();
+    })
     .then((data) => {
       displayUpdateUserResult(data);
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => console.error(error));
 }
 
 function displayUpdateUserResult(message) {
@@ -150,21 +169,43 @@ function displayUpdateUserResult(message) {
 // ----- //
 function deleteUser() {
   var deleteUserID = document.getElementById("deleteUserID").value.trim();
-  if (deleteUserID === "") {
-    alert("Please enter a user ID to delete.");
+  if (!deleteUserID) {
+    displayDeleteResult("Please Enter the User ID.");
     return;
   }
 
+  var modal = document.getElementById("deleteConfirmationModal");
+  modal.style.display = "block";
+  var cancelBtn = document.getElementById("cancelDelete");
+  var confirmBtn = document.getElementById("confirmDelete");
+
+  cancelBtn.onclick = function () {
+    modal.style.display = "none";
+    displayDeleteResult("Deletion cancelled.");
+  };
+
+  confirmBtn.onclick = function () {
+    modal.style.display = "none";
+    proceedToDelete(deleteUserID);
+  };
+}
+
+function proceedToDelete(deleteUserID) {
   fetch(`/user-management/deleteUser?userID=${deleteUserID}`, {
     method: "DELETE",
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
     .then((data) => {
-      displayDeleteResult(data);
+      displayDeleteResult(data.message || "User successfully deleted.");
     })
     .catch((error) => {
       console.error("Error:", error);
-      displayDeleteResult("Network error occurred");
+      displayDeleteResult("Network error occurred: " + error.message);
     });
 }
 
@@ -187,18 +228,16 @@ function clearAllResults() {
   ];
   resultDivs.forEach((div) => {
     div.innerHTML = "";
-    div.style.display = "none"; // Hide all result divs initially
+    div.style.display = "none";
   });
 }
 
 function toggleDarkMode() {
   const body = document.body;
   body.classList.toggle("dark-mode");
-  // Save the current mode in localStorage
   localStorage.setItem("darkMode", body.classList.contains("dark-mode"));
 }
 
-// Function to check the saved theme in localStorage and apply it
 function applyInitialTheme() {
   const darkMode = localStorage.getItem("darkMode") === "true";
   if (darkMode) {
@@ -206,5 +245,15 @@ function applyInitialTheme() {
   }
 }
 
-// Call applyInitialTheme when the document loads
 document.addEventListener("DOMContentLoaded", applyInitialTheme);
+
+function displayMessage(elementId, message) {
+  const element = document.getElementById(elementId);
+  element.innerHTML = "";
+  if (message) {
+    element.textContent = message;
+    element.style.display = "block";
+  } else {
+    element.style.display = "none";
+  }
+}

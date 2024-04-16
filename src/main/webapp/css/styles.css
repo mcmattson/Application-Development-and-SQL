@@ -1,4 +1,3 @@
-/* styles.css */
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
@@ -70,7 +69,7 @@ button {
     background-color: #007BFF;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 0px;
     text-align: center;
     line-height: 28px;
     font-size: 14px;
@@ -89,7 +88,10 @@ button:hover {
     background-color: #0056b3;
 }
 
-#searchResult,#addUserResult,#updateUserResult,#deleteUserResult {
+#searchResult,
+#addUserResult,
+#updateUserResult,
+#deleteUserResult {
     display: none;
     margin-top: 10px;
     text-align: left;
@@ -103,29 +105,123 @@ button:hover {
     display: none;
 }
 
-#searchResult ul,#addUserResult ul,#updateUserResult ul, #deleteUserResult ul {
+#searchResult ul,
+#addUserResult ul,
+#updateUserResult ul,
+#deleteUserResult ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-#searchResult li,#addUserResult li,#updateUserResult li,#deleteUserResult li {
+#searchResult li,
+#addUserResult li,
+#updateUserResult li,
+#deleteUserResult li {
     padding: 8px 10px;
     border-bottom: 1px solid #eee;
 }
 
-#searchResult li:last-child,#addUserResult li:last-child,#updateUserResult li:last-child,#deleteUserResult li:last-child {
+#searchResult li:last-child,
+#addUserResult li:last-child,
+#updateUserResult li:last-child,
+#deleteUserResult li:last-child {
     border-bottom: none;
 }
 
-#searchResult li:hover,#addUserResult li:hover,#updateUserResult li:hover, #deleteUserResult li:hover {
+#searchResult li:hover,
+#addUserResult li:hover,
+#updateUserResult li:hover,
+#deleteUserResult li:hover {
     background-color: #e6e6e6;
 }
 
-/* Dark mode styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #fefefe;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 350px;
+    height: 250px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h4 {
+    font-weight: bold;
+    text-align: center;
+    margin: 5px 0;
+    font-size: 24px;
+}
+
+.modal-content p {
+    text-align: center;
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.btn-flat {
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 0 10px;
+    flex: 1;
+    text-align: center;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 0;
+    font-size: 16px;
+}
+
+#confirmDelete {
+    background-color: #d32f2f;
+}
+
+#confirmDelete:hover,
+.btn-flat:hover {
+    opacity: 0.8;
+}
+
+#confirmDelete:hover {
+    background-color: #b71c1c;
+}
+
 body.dark-mode {
     background-color: #121212;
     color: #e0e0e0;
+}
+
+body.dark-mode #confirmDelete {
+    background-color: #b71c1c;
+    color: white;
+}
+
+body.dark-mode #confirmDelete:hover {
+    background-color: #7f0000;
 }
 
 body.dark-mode .section,
@@ -139,15 +235,6 @@ body.dark-mode #deleteUserResult {
     background-color: #333;
     border-color: #444;
     color: #ddd;
-}
-
-button {
-    background-color: #007BFF;
-    color: white;
-}
-
-button:hover {
-    background-color: #0056b3;
 }
 
 body.dark-mode button {
@@ -167,4 +254,22 @@ body.dark-mode input {
 
 body.dark-mode input::placeholder {
     color: #ccc;
+}
+
+body.dark-mode .modal-content {
+    background-color: #333;
+    color: #fff;
+}
+
+body.dark-mode .btn-flat {
+    background-color: #0056b3;
+    color: #ccc;
+}
+
+body.dark-mode .btn-flat:hover {
+    background-color: #003a75;
+}
+
+body.dark-mode .modal {
+    background-color: rgba(0, 0, 0, 0.7);
 }
