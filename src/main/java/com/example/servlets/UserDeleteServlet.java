@@ -23,7 +23,6 @@ public class UserDeleteServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
         String userID = request.getParameter("userID");
 
         try {
@@ -33,25 +32,55 @@ public class UserDeleteServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        try (Connection connection = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUsername(),
-                DBConfig.getPassword());
-                PreparedStatement statement = connection.prepareStatement("DELETE FROM Users WHERE UserID = ?")) {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUsername(),
+                    DBConfig.getPassword());
+            connection.setAutoCommit(false); // Start transaction
 
-            statement.setString(1, userID);
-            int result = statement.executeUpdate();
-
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            if (result > 0) {
-                out.print(new Gson().toJson("SUCCESS: User " + userID + " has been deleted."));
-            } else {
-                out.print(new Gson().toJson("ERROR: No user found with provided ID: " + userID + "."));
+            // First, delete user's usage records
+            try (PreparedStatement usesStmt = connection.prepareStatement("DELETE FROM Uses WHERE UserID = ?")) {
+                usesStmt.setString(1, userID);
+                usesStmt.executeUpdate();
             }
-            out.flush();
+
+            // Then, delete the user
+            try (PreparedStatement usersStmt = connection.prepareStatement("DELETE FROM Users WHERE UserID = ?")) {
+                usersStmt.setString(1, userID);
+                int result = usersStmt.executeUpdate();
+                PrintWriter out = response.getWriter();
+                if (result > 0) {
+                    connection.commit(); 
+                    out.print(new Gson()
+                            .toJson("SUCCESS: User and associated uses for UserID " + userID + " have been deleted."));
+                } else {
+                    connection.rollback();
+                    out.print(new Gson().toJson("ERROR: No user found with provided ID: " + userID + "."));
+                }
+                out.flush();
+            }
+
         } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "An error occurred while processing your request: " + e.getMessage());
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException se) {
+                    se.printStackTrace();
+                }
+            }
+            PrintWriter out = response.getWriter();
+            out.print(new Gson().toJson("An error occurred while processing your request: " + e.getMessage()));
+            out.flush();
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
