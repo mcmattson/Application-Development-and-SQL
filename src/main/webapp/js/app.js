@@ -2,6 +2,9 @@ var searchResultDiv = document.getElementById("searchResult");
 var addUserResultDiv = document.getElementById("addUserResult");
 var deleteUserResultDiv = document.getElementById("deleteUserResult");
 var updateUserResultDiv = document.getElementById("updateUserResult");
+var addUpdateDeviceUsesResultsDiv = document.getElementById(
+  "addUpdateDeviceUsesResults"
+);
 
 function searchUsers() {
   var searchInput = document.getElementById("searchInput").value.trim();
@@ -219,12 +222,96 @@ function displayDeleteResult(message) {
   }
 }
 
+function addUpdateDeviceUses() {
+  var userID = document.getElementById("userID").value.trim();
+  var deviceID = document.getElementById("deviceID").value.trim();
+  var usageDateYear = document.getElementById("usageDateYear").value.trim();
+  var usageDateMonth = document.getElementById("usageDateMonth").value.trim();
+  var usageDateDay = document.getElementById("usageDateDay").value.trim();
+  var usageDuration = document.getElementById("usageDuration").value.trim();
+
+  clearAllResults();
+
+  if (userID === "") {
+    displayUsesResult("Please Enter the User ID.");
+    return;
+  }
+
+  if (deviceID === "") {
+    displayUsesResult("Please Enter the Device ID.");
+    return;
+  }
+
+  if (usageDateYear === "") {
+    displayUsesResult("Please enter Date Year (yyyy).");
+    return;
+  }
+
+  if (usageDateMonth === "") {
+    displayUsesResult("Please enter Date Month (mm).");
+    return;
+  }
+
+  if (usageDateDay === "") {
+    displayUsesResult("Please enter Date Day (dd).");
+    return;
+  }
+
+  if (usageDuration === "") {
+    displayUsesResult("Please enter Duration in Minutes.");
+    return;
+  }
+
+  fetch(
+    `/user-management/addUpdateDeviceUses?userID=${userID}&deviceID=${deviceID}&usageDateYear=${usageDateYear}&usageDateMonth=${usageDateMonth}&usageDateDay=${usageDateDay}&usageDuration=${usageDuration}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userID: userID,
+        deviceID: deviceID,
+        usageDateYear: usageDateYear,
+        usageDateMonth: usageDateMonth,
+        usageDateDay: usageDateDay,
+        usageDuration: usageDuration,
+      }),
+    }
+  )
+    .then((response) => {
+      if (!response.ok) {
+        displayUsesResult("ERROR: Network error occurred");
+        throw new Error("Network error occurred");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      displayUsesResult(data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      displayUsesResult("Network error occurred: " + error.message);
+    });
+}
+
+function displayUsesResult(message) {
+  clearAllResults();
+  if (message) {
+    addUpdateDeviceUsesResultsDiv.textContent = message;
+    addUpdateDeviceUsesResultsDiv.style.display = "block";
+  } else {
+    addUpdateDeviceUsesResultsDiv.style.display = "none";
+  }
+}
+
 function clearAllResults() {
   const resultDivs = [
     searchResultDiv,
     addUserResultDiv,
     updateUserResultDiv,
     deleteUserResultDiv,
+    addUpdateDeviceUsesResultsDiv,
   ];
   resultDivs.forEach((div) => {
     div.innerHTML = "";

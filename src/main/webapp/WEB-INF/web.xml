@@ -53,6 +53,18 @@
         <url-pattern>/deleteUser</url-pattern>
     </servlet-mapping>
 
+    <!-- Define the UserUsesAddServlet -->
+    <servlet>
+        <servlet-name>UserUsesAddUpdateServlet</servlet-name>
+        <servlet-class>com.example.servlets.UserUsesAddUpdateServlet</servlet-class>
+    </servlet>
+
+    <!-- Map the UserUsesAddUpdateServlet to /search -->
+    <servlet-mapping>
+        <servlet-name>UserUsesAddUpdateServlet</servlet-name>
+        <url-pattern>/addUpdateDeviceUses</url-pattern>
+    </servlet-mapping>
+
     <!-- If you want to define a welcome file -->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

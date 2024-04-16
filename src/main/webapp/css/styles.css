@@ -32,6 +32,8 @@ h1 {
     background-color: #f9f9f9;
 }
 
+
+
 .flex-container {
     display: flex;
     flex-wrap: wrap;
@@ -48,10 +50,27 @@ h1 {
     justify-content: space-between;
 }
 
+.flex-container3 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
 input {
     padding: 10px;
     min-width: 150px;
     height: 50px;
+}
+
+.section .flex-container>*,
+.section2 .flex-container2>*,
+.section2 .flex-container3>* {
+    flex: 1 1 0px;
+    /* Allow shrink and grow as needed */
+    min-width: 0;
+    /* Prevent overflow */
 }
 
 .flex-container input[type="text"] {
@@ -59,6 +78,10 @@ input {
 }
 
 .flex-container2 input[type="text"] {
+    flex-grow: 1;
+}
+
+.flex-container3 input[type="text"] {
     flex-grow: 1;
 }
 
@@ -84,14 +107,59 @@ button {
     flex: 1;
 }
 
+.flex-container4 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.flex-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-row.button-row {
+    justify-content: right;
+    padding: 5px 10px;
+}
+
+.flex-container4 input[type="text"] {
+    flex: 1;
+    margin-right: 10px;
+    /* Spacing between inputs */
+}
+
+.flex-container4 .flex-row:last-child input[type="text"] {
+    margin-right: 0;
+    /* No margin for the last input */
+}
+
+.flex-container4 button {
+    width: 26%;
+}
+
+.flex-container3 input[type="text"],
+.flex-container3 button {
+    flex-grow: 1;
+}
 button:hover {
     background-color: #0056b3;
+}
+
+#userID,
+#deviceID,
+#usageDateYear,
+#usageDateMonth,
+#usageDateDay,
+#usageDuration {
+    flex-grow: 1;
 }
 
 #searchResult,
 #addUserResult,
 #updateUserResult,
-#deleteUserResult {
+#deleteUserResult,
+#addUpdateDeviceUsesResults {
     display: none;
     margin-top: 10px;
     text-align: left;
@@ -108,7 +176,8 @@ button:hover {
 #searchResult ul,
 #addUserResult ul,
 #updateUserResult ul,
-#deleteUserResult ul {
+#deleteUserResult ul,
+#addUpdateDeviceUsesResults ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -117,7 +186,8 @@ button:hover {
 #searchResult li,
 #addUserResult li,
 #updateUserResult li,
-#deleteUserResult li {
+#deleteUserResult li,
+#addUpdateDeviceUsesResults li {
     padding: 8px 10px;
     border-bottom: 1px solid #eee;
 }
@@ -132,7 +202,8 @@ button:hover {
 #searchResult li:hover,
 #addUserResult li:hover,
 #updateUserResult li:hover,
-#deleteUserResult li:hover {
+#deleteUserResult li:hover,
+#addUpdateDeviceUsesResults li:hover {
     background-color: #e6e6e6;
 }
 
@@ -231,7 +302,8 @@ body.dark-mode .flex-container2,
 body.dark-mode #searchResult,
 body.dark-mode #addUserResult,
 body.dark-mode #updateUserResult,
-body.dark-mode #deleteUserResult {
+body.dark-mode #deleteUserResult,
+body.dark-mode #addUpdateDeviceUsesResults {
     background-color: #333;
     border-color: #444;
     color: #ddd;
