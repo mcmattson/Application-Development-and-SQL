@@ -96,13 +96,12 @@ function addUser() {
 }
 
 function displayAddUserResult(message) {
-  // Clear all result divs to ensure no old messages are displayed
   clearAllResults();
   if (message) {
     addUserResultDiv.textContent = message;
-    addUserResultDiv.style.display = "block"; // Show only if there is a message
+    addUserResultDiv.style.display = "block";
   } else {
-    addUserResultDiv.style.display = "none"; // Hide if no message
+    addUserResultDiv.style.display = "none";
   }
 }
 
@@ -175,21 +174,16 @@ function deleteUser() {
     return;
   }
 
-  // Show the modal
   var modal = document.getElementById("deleteConfirmationModal");
   modal.style.display = "block";
-
-  // Get the buttons
   var cancelBtn = document.getElementById("cancelDelete");
   var confirmBtn = document.getElementById("confirmDelete");
 
-  // If the user clicks "Cancel", close the modal
   cancelBtn.onclick = function () {
     modal.style.display = "none";
     displayDeleteResult("Deletion cancelled.");
   };
 
-  // If the user clicks "Delete", proceed with deletion
   confirmBtn.onclick = function () {
     modal.style.display = "none";
     proceedToDelete(deleteUserID);
@@ -234,18 +228,16 @@ function clearAllResults() {
   ];
   resultDivs.forEach((div) => {
     div.innerHTML = "";
-    div.style.display = "none"; // Hide all result divs initially
+    div.style.display = "none";
   });
 }
 
 function toggleDarkMode() {
   const body = document.body;
   body.classList.toggle("dark-mode");
-  // Save the current mode in localStorage
   localStorage.setItem("darkMode", body.classList.contains("dark-mode"));
 }
 
-// Function to check the saved theme in localStorage and apply it
 function applyInitialTheme() {
   const darkMode = localStorage.getItem("darkMode") === "true";
   if (darkMode) {
@@ -253,16 +245,15 @@ function applyInitialTheme() {
   }
 }
 
-// Call applyInitialTheme when the document loads
 document.addEventListener("DOMContentLoaded", applyInitialTheme);
 
 function displayMessage(elementId, message) {
   const element = document.getElementById(elementId);
-  element.innerHTML = ""; // Clear any existing content
+  element.innerHTML = "";
   if (message) {
     element.textContent = message;
-    element.style.display = "block"; // Show the element
+    element.style.display = "block";
   } else {
-    element.style.display = "none"; // Hide the element if no message
+    element.style.display = "none";
   }
 }
