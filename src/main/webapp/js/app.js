@@ -2,7 +2,9 @@ var searchResultDiv = document.getElementById("searchResult");
 var addUserResultDiv = document.getElementById("addUserResult");
 var deleteUserResultDiv = document.getElementById("deleteUserResult");
 var updateUserResultDiv = document.getElementById("updateUserResult");
-var addUsesResultDiv = document.getElementById("addUsesResult");
+var addUpdateDeviceUsesResultsDiv = document.getElementById(
+  "addUpdateDeviceUsesResults"
+);
 
 function searchUsers() {
   var searchInput = document.getElementById("searchInput").value.trim();
@@ -220,7 +222,7 @@ function displayDeleteResult(message) {
   }
 }
 
-function addUserUses() {
+function addUpdateDeviceUses() {
   var userID = document.getElementById("userID").value.trim();
   var deviceID = document.getElementById("deviceID").value.trim();
   var usageDateYear = document.getElementById("usageDateYear").value.trim();
@@ -231,37 +233,37 @@ function addUserUses() {
   clearAllResults();
 
   if (userID === "") {
-    displayAddUsesResult("Please Enter the User ID.");
+    displayUsesResult("Please Enter the User ID.");
     return;
   }
 
   if (deviceID === "") {
-    displayAddUsesResult("Please Enter the Device ID.");
+    displayUsesResult("Please Enter the Device ID.");
     return;
   }
 
   if (usageDateYear === "") {
-    displayAddUsesResult("Please enter Date Year (yyyy).");
+    displayUsesResult("Please enter Date Year (yyyy).");
     return;
   }
 
   if (usageDateMonth === "") {
-    displayAddUsesResult("Please enter Date Month (mm).");
+    displayUsesResult("Please enter Date Month (mm).");
     return;
   }
 
   if (usageDateDay === "") {
-    displayAddUsesResult("Please enter Date Day (dd).");
+    displayUsesResult("Please enter Date Day (dd).");
     return;
   }
 
   if (usageDuration === "") {
-    displayAddUsesResult("Please enter Duration in Minutes.");
+    displayUsesResult("Please enter Duration in Minutes.");
     return;
   }
 
   fetch(
-    `/user-management/addUserUses?userID=${userID}&deviceID=${deviceID}&usageDateYear=${usageDateYear}&usageDateMonth=${usageDateMonth}&usageDateDay=${usageDateDay}&usageDuration=${usageDuration}`,
+    `/user-management/addUpdateDeviceUses?userID=${userID}&deviceID=${deviceID}&usageDateYear=${usageDateYear}&usageDateMonth=${usageDateMonth}&usageDateDay=${usageDateDay}&usageDuration=${usageDuration}`,
     {
       method: "POST",
       headers: {
@@ -279,24 +281,27 @@ function addUserUses() {
   )
     .then((response) => {
       if (!response.ok) {
-        displayAddUsesResult("ERROR: Network error occurred");
+        displayUsesResult("ERROR: Network error occurred");
         throw new Error("Network error occurred");
       }
       return response.json();
     })
     .then((data) => {
-      displayAddUsesResult(data);
+      displayUsesResult(data);
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error("Error:", error);
+      displayUsesResult("Network error occurred: " + error.message);
+    });
 }
 
-function displayAddUsesResult(message) {
+function displayUsesResult(message) {
   clearAllResults();
   if (message) {
-    addUsesResultDiv.textContent = message;
-    addUsesResultDiv.style.display = "block";
+    addUpdateDeviceUsesResultsDiv.textContent = message;
+    addUpdateDeviceUsesResultsDiv.style.display = "block";
   } else {
-    addUsesResultDiv.style.display = "none";
+    addUpdateDeviceUsesResultsDiv.style.display = "none";
   }
 }
 
@@ -306,7 +311,7 @@ function clearAllResults() {
     addUserResultDiv,
     updateUserResultDiv,
     deleteUserResultDiv,
-    addUsesResultDiv,
+    addUpdateDeviceUsesResultsDiv,
   ];
   resultDivs.forEach((div) => {
     div.innerHTML = "";

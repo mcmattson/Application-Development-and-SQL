@@ -51,7 +51,7 @@ public class UserUpdateServlet extends HttpServlet {
                             "SUCCESS: User: " + userID + " - " + userName + " - " + userType + " has been updated."));
                 } else {
                     out.print(new Gson()
-                            .toJson("ERROR: " + userID + "was not found. Record Update Unsuccessful."));
+                            .toJson("ERROR: " + userID + " was not found. Record Update Unsuccessful."));
                 }
                 out.flush();
             }

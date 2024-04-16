@@ -107,7 +107,7 @@ button:hover {
 #addUserResult,
 #updateUserResult,
 #deleteUserResult,
-#addUsesResult {
+#addUpdateDeviceUsesResults {
     display: none;
     margin-top: 10px;
     text-align: left;
@@ -125,7 +125,7 @@ button:hover {
 #addUserResult ul,
 #updateUserResult ul,
 #deleteUserResult ul,
-#addUsesResult ul {
+#addUpdateDeviceUsesResults ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -135,7 +135,7 @@ button:hover {
 #addUserResult li,
 #updateUserResult li,
 #deleteUserResult li,
-#addUsesResult li {
+#addUpdateDeviceUsesResults li {
     padding: 8px 10px;
     border-bottom: 1px solid #eee;
 }
@@ -151,7 +151,7 @@ button:hover {
 #addUserResult li:hover,
 #updateUserResult li:hover,
 #deleteUserResult li:hover,
-#addUsesResult li:hover {
+#addUpdateDeviceUsesResults li:hover {
     background-color: #e6e6e6;
 }
 
@@ -251,7 +251,7 @@ body.dark-mode #searchResult,
 body.dark-mode #addUserResult,
 body.dark-mode #updateUserResult,
 body.dark-mode #deleteUserResult,
-body.dark-mode #addUsesResult {
+body.dark-mode #addUpdateDeviceUsesResults {
     background-color: #333;
     border-color: #444;
     color: #ddd;
