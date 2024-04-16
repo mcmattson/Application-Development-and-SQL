@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import com.google.gson.Gson;
+import com.example.util.DBConfig;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,10 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UserUpdateServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private static final String JDBC_URL = "jdbc:mysql://faure.cs.colostate.edu:3306/mmattson";
-    private static final String JDBC_USERNAME = "mmattson";
-    private static final String JDBC_PASSWORD = "829587718";
-
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
@@ -32,13 +29,14 @@ public class UserUpdateServlet extends HttpServlet {
         String userType = request.getParameter("updateUserType");
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(DBConfig.getDriver());
         } catch (ClassNotFoundException e) {
             System.err.println("Driver Error");
             e.printStackTrace();
         }
 
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
+        try (Connection connection = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUsername(),
+                DBConfig.getPassword());
                 PreparedStatement statement = connection
                         .prepareStatement("UPDATE Users SET UserName = ?, UserType = ? WHERE UserID = ?")) {
 
