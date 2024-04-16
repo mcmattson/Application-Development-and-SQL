@@ -32,6 +32,8 @@ h1 {
     background-color: #f9f9f9;
 }
 
+
+
 .flex-container {
     display: flex;
     flex-wrap: wrap;
@@ -41,6 +43,14 @@ h1 {
 }
 
 .flex-container2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-container3 {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -59,6 +69,10 @@ input {
 }
 
 .flex-container2 input[type="text"] {
+    flex-grow: 1;
+}
+
+.flex-container3 input[type="text"] {
     flex-grow: 1;
 }
 
@@ -84,6 +98,7 @@ button {
     flex: 1;
 }
 
+
 button:hover {
     background-color: #0056b3;
 }
@@ -91,7 +106,8 @@ button:hover {
 #searchResult,
 #addUserResult,
 #updateUserResult,
-#deleteUserResult {
+#deleteUserResult,
+#addUsesResult {
     display: none;
     margin-top: 10px;
     text-align: left;
@@ -108,7 +124,8 @@ button:hover {
 #searchResult ul,
 #addUserResult ul,
 #updateUserResult ul,
-#deleteUserResult ul {
+#deleteUserResult ul,
+#addUsesResult ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -117,7 +134,8 @@ button:hover {
 #searchResult li,
 #addUserResult li,
 #updateUserResult li,
-#deleteUserResult li {
+#deleteUserResult li,
+#addUsesResult li {
     padding: 8px 10px;
     border-bottom: 1px solid #eee;
 }
@@ -132,7 +150,8 @@ button:hover {
 #searchResult li:hover,
 #addUserResult li:hover,
 #updateUserResult li:hover,
-#deleteUserResult li:hover {
+#deleteUserResult li:hover,
+#addUsesResult li:hover {
     background-color: #e6e6e6;
 }
 
@@ -231,7 +250,8 @@ body.dark-mode .flex-container2,
 body.dark-mode #searchResult,
 body.dark-mode #addUserResult,
 body.dark-mode #updateUserResult,
-body.dark-mode #deleteUserResult {
+body.dark-mode #deleteUserResult,
+body.dark-mode #addUsesResult {
     background-color: #333;
     border-color: #444;
     color: #ddd;
