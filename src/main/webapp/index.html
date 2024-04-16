@@ -50,14 +50,20 @@
     
     <div class="section2">
         <h2>Add/Update Device Uses</h2>
-        <div class="flex-container3">
+        <div class="flex-container4">
+            <div class="flex-row">
             <input type="text" id="userID" placeholder="Enter user ID">
             <input type="text" id="deviceID" placeholder="Enter Device ID">
+            <input type="text" id="usageDuration" placeholder="Enter Duration Minutes (Max Total 1000 for the Day)">
+            </div>
+            <div class="flex-row">
             <input type="text" id="usageDateYear" placeholder="Enter Date Year (yyyy)">
             <input type="text" id="usageDateMonth" placeholder="Enter Date Month (mm)">
             <input type="text" id="usageDateDay" placeholder="Enter Date Day (dd)">
-            <input type="text" id="usageDuration" placeholder="Enter Duration Minutes (Max Total 1000 for the Day)">
+            </div>
+            <div class="flex-row button-row">
             <button onclick="addUpdateDeviceUses()">Add Device Uses</button>
+            </div>
         </div>
         <div id="addUpdateDeviceUsesResults"></div>
     </div>

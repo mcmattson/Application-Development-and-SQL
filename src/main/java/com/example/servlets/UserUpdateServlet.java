@@ -56,14 +56,12 @@ public class UserUpdateServlet extends HttpServlet {
                 out.flush();
             }
         } catch (SQLException e) {
-            log("SQL Error: ", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             try (PrintWriter out = response.getWriter()) {
                 out.print(new Gson().toJson("An error occurred while processing your request: " + e.getMessage()));
                 out.flush();
             }
         } catch (Exception e) {
-            log("General Error: ", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             try (PrintWriter out = response.getWriter()) {
                 out.print(new Gson().toJson("An unexpected error occurred: " + e.getMessage()));

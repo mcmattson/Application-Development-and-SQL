@@ -58,20 +58,29 @@ public class UserUsesAddUpdateServlet extends HttpServlet {
                     int parsedDuration = Integer.parseInt(usageDuration);
 
                     // Check if Entry will be less than zero
-                    if (existingDuration + parsedDuration < 0) {
-                        throw new IllegalArgumentException(
-                                "Updating duration results in negative total duration, operation aborted.");
-                    }
+                    try (PrintWriter out = response.getWriter()) {
+                        if (existingDuration + parsedDuration < 0) {
+                            out.print(new Gson()
+                                    .toJson("Updating duration results in negative total duration, operation aborted."));
+                            out.flush();
+                            return;
+                        } else if (existingDuration + parsedDuration > 1000) {
+                            out.print(new Gson()
+                                    .toJson("Updating duration results in total duration over the max, operation aborted."));
+                            out.flush();
+                            return;
+                        }
 
-                    // Update the existing record
-                    String updateSQL = "UPDATE Uses SET UsageDuration = UsageDuration + ? WHERE UserID = ? AND DeviceID = ? AND UsageDate = ?";
-                    try (PreparedStatement updateStmt = connection.prepareStatement(updateSQL)) {
-                        updateStmt.setString(1, usageDuration);
-                        updateStmt.setString(2, userID);
-                        updateStmt.setString(3, deviceID);
-                        updateStmt.setString(4, usageDate);
-                        updateStmt.executeUpdate();
-                        response.getWriter().println(new Gson().toJson("Updated existing usage successfully."));
+                        // Update the existing record
+                        String updateSQL = "UPDATE Uses SET UsageDuration = UsageDuration + ? WHERE UserID = ? AND DeviceID = ? AND UsageDate = ?";
+                        try (PreparedStatement updateStmt = connection.prepareStatement(updateSQL)) {
+                            updateStmt.setString(1, usageDuration);
+                            updateStmt.setString(2, userID);
+                            updateStmt.setString(3, deviceID);
+                            updateStmt.setString(4, usageDate);
+                            updateStmt.executeUpdate();
+                            response.getWriter().println(new Gson().toJson("Updated existing usage successfully."));
+                        }
                     }
                 } else {
                     // Insert a new record if no existing record is found
