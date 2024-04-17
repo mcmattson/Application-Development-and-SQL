@@ -33,19 +33,25 @@ public class UserSearchServlet extends HttpServlet {
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
         List<Uses> searchResult = new ArrayList<>();
+
         SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat formattedDate = new SimpleDateFormat("MM/dd/yyyy");
+
+        int page = Integer.parseInt(request.getParameter("page"));
+        final int pageSize = 25; // Set the page size for pagination
+        int offset = (page - 1) * pageSize;
 
         try {
             Class.forName(DBConfig.getDriver());
             try (Connection connection = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUsername(),
                     DBConfig.getPassword())) {
 
+                // Create Request depending on user entry
                 String sql = "SELECT u.UserID, u.UserName, u.UserType, d.DeviceName, us.UsageDate, us.UsageDuration " +
                         "FROM Users u " +
                         "LEFT JOIN Uses us ON u.UserID = us.UserID " +
                         "LEFT JOIN Devices d ON us.DeviceID = d.DeviceID " +
-                        "WHERE u.UserName LIKE ? ";
+                        "WHERE u.UserName LIKE ?";
 
                 if (userID != null && !userID.trim().isEmpty()) {
                     sql += "AND u.UserID = ?";
@@ -55,7 +61,9 @@ public class UserSearchServlet extends HttpServlet {
                         !startDate.trim().isEmpty() && !endDate.trim().isEmpty()) {
                     sql += "AND us.UsageDate BETWEEN ? AND ?";
                 }
+                sql += "LIMIT ? OFFSET ?";
 
+                // Prepare Final Request
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     statement.setString(1, "%" + userName + "%");
 
@@ -71,6 +79,10 @@ public class UserSearchServlet extends HttpServlet {
                         statement.setString(paramIndex++, endDate);
                     }
 
+                    statement.setInt(paramIndex++, pageSize);
+                    statement.setInt(paramIndex, offset);
+
+                    // Return results to frontend
                     try (ResultSet resultSet = statement.executeQuery()) {
                         while (resultSet.next()) {
                             int userId = resultSet.getInt("UserID");

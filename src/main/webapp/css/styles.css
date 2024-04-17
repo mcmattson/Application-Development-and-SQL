@@ -122,12 +122,10 @@ button {
 .flex-container4 input[type="text"] {
     flex: 1;
     margin-right: 10px;
-    /* Spacing between inputs */
 }
 
 .flex-container4 .flex-row:last-child input[type="text"] {
     margin-right: 0;
-    /* No margin for the last input */
 }
 
 .flex-container4 button {
@@ -148,21 +146,17 @@ button:hover {
     background-color: #f9f9f9;
 }
 
-/* Style table headers and data cells */
 #searchResult th,
 #searchResult td {
     border: 1px solid #ddd;
-    /* Define border for each cell */
     padding: 8px;
     text-align: center;
-    /* Align text to the left, change to 'center' if you prefer */
 }
 
 #searchResult tr {
     background-color: #f2f2f2;
 }
 
-/* Header row style */
 #searchResult th {
     background-color: #333;
     color: white;
@@ -230,6 +224,8 @@ button:hover {
     background-color: #e6e6e6;
 }
 
+/* CONFIRM POPUP */
+
 .modal {
     display: none;
     position: fixed;
@@ -291,6 +287,7 @@ button:hover {
     font-size: 16px;
 }
 
+
 #confirmDelete {
     background-color: #d32f2f;
 }
@@ -303,6 +300,31 @@ button:hover {
 #confirmDelete:hover {
     background-color: #b71c1c;
 }
+
+/* PAGINATION SEARCH */
+
+#paginationControls {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.pagination-prev {
+    margin-right: auto;
+    width: 25%;
+}
+
+.pagination-next {
+    margin-left: auto;
+    width: 25%;
+}
+
+#paginationControls button:only-child {
+    margin-left: auto;
+}
+
+/* DARK-MODE */
 
 body.dark-mode {
     background-color: #121212;
