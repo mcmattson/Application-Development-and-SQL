@@ -15,7 +15,6 @@ function searchUsers(page = 1) {
 
   clearAllResults();
 
-  // Construct the URL with query parameters for user name, user ID, and date range
   let url = "/user-management/search?userName=" + searchInput;
   if (userID) {
     url += "&userID=" + userID;
@@ -23,9 +22,8 @@ function searchUsers(page = 1) {
   if (startDate && endDate) {
     url += "&startDate=" + startDate + "&endDate=" + endDate;
   }
-
   url += "&page=" + page;
-  // Use the constructed URL to perform the search
+
   fetch(url)
     .then((response) => {
       if (!response.ok) {
@@ -58,7 +56,6 @@ function displaySearchResult(data, message = "") {
     return;
   }
 
-  // Create table
   const table = document.createElement("table");
   const thead = document.createElement("thead");
   const tbody = document.createElement("tbody");
@@ -66,7 +63,6 @@ function displaySearchResult(data, message = "") {
   table.appendChild(tbody);
   searchResultDiv.appendChild(table);
 
-  // Adding headers
   const headerRow = document.createElement("tr");
   const headers = [
     "User ID",
@@ -83,7 +79,6 @@ function displaySearchResult(data, message = "") {
   });
   thead.appendChild(headerRow);
 
-  // Adding data rows
   data.forEach((user) => {
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -106,17 +101,17 @@ function addUser() {
 
   clearAllResults();
 
-  if (newUserID === "") {
+  if (!newUserID) {
     displayAddUserResult("Please Enter the User ID.");
     return;
   }
 
-  if (newUserName === "") {
+  if (!newUserName) {
     displayAddUserResult("Please Enter the User Name.");
     return;
   }
 
-  if (newUserType === "") {
+  if (!newUserType) {
     displayAddUserResult(
       "Please enter Administrator, Visitor, or Regular for User Type."
     );
@@ -167,17 +162,17 @@ function updateUser() {
   let updateUserType = document.getElementById("updateUserType").value.trim();
 
   clearAllResults();
-  if (oldUserID === "") {
+  if (!oldUserID) {
     displayUpdateUserResult("Please Enter the User ID.");
     return;
   }
 
-  if (updateUserName === "") {
+  if (!updateUserName) {
     displayUpdateUserResult("Please Enter the User Name.");
     return;
   }
 
-  if (updateUserType === "") {
+  if (!updateUserType) {
     displayUpdateUserResult(
       "Please enter Administrator, Visitor, or Regular for User Type."
     );
@@ -275,58 +270,44 @@ function displayDeleteResult(message) {
 }
 
 function addUpdateDeviceUses() {
-  let userID = document.getElementById("userID").value.trim();
+  let userUpdateID = document.getElementById("userUpdateID").value.trim();
   let deviceID = document.getElementById("deviceID").value.trim();
-  let usageDateYear = document.getElementById("usageDateYear").value.trim();
-  let usageDateMonth = document.getElementById("usageDateMonth").value.trim();
-  let usageDateDay = document.getElementById("usageDateDay").value.trim();
+  let usageDate = document.getElementById("usageDate").value.trim();
   let usageDuration = document.getElementById("usageDuration").value.trim();
 
   clearAllResults();
 
-  if (userID === "") {
+  if (!userUpdateID) {
     displayUsesResult("Please Enter the User ID.");
     return;
   }
 
-  if (deviceID === "") {
+  if (!deviceID) {
     displayUsesResult("Please Enter the Device ID.");
     return;
   }
 
-  if (usageDateYear === "") {
-    displayUsesResult("Please enter Date Year (yyyy).");
+  if (!usageDate) {
+    displayUsesResult("Please enter Date.");
     return;
   }
 
-  if (usageDateMonth === "") {
-    displayUsesResult("Please enter Date Month (mm).");
-    return;
-  }
-
-  if (usageDateDay === "") {
-    displayUsesResult("Please enter Date Day (dd).");
-    return;
-  }
-
-  if (usageDuration === "") {
+  if (!usageDuration) {
     displayUsesResult("Please enter Duration in Minutes.");
     return;
   }
 
   fetch(
-    `/user-management/addUpdateDeviceUses?userID=${userID}&deviceID=${deviceID}&usageDateYear=${usageDateYear}&usageDateMonth=${usageDateMonth}&usageDateDay=${usageDateDay}&usageDuration=${usageDuration}`,
+    `/user-management/addUpdateDeviceUses?userUpdateID=${userUpdateID}&deviceID=${deviceID}&usageDate=${usageDate}&usageDuration=${usageDuration}`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userID: userID,
+        userUpdateID: userUpdateID,
         deviceID: deviceID,
-        usageDateYear: usageDateYear,
-        usageDateMonth: usageDateMonth,
-        usageDateDay: usageDateDay,
+        usageDate: usageDate,
         usageDuration: usageDuration,
       }),
     }

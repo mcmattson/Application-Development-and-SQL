@@ -25,15 +25,10 @@ public class UserUsesAddUpdateServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        String userID = request.getParameter("userID");
+        String userUpdateID = request.getParameter("userUpdateID");
         String deviceID = request.getParameter("deviceID");
-        String usageDateYear = request.getParameter("usageDateYear");
-        String usageDateMonth = request.getParameter("usageDateMonth");
-        String usageDateDay = request.getParameter("usageDateDay");
+        String usageDate = request.getParameter("usageDate");
         String usageDuration = request.getParameter("usageDuration");
-
-        // Truncate Usage Date into Database requirements
-        String usageDate = usageDateYear + '-' + usageDateMonth + '-' + usageDateDay;
 
         try {
             Class.forName(DBConfig.getDriver());
@@ -48,7 +43,7 @@ public class UserUsesAddUpdateServlet extends HttpServlet {
             // First, check if an entry already exists
             String selectSQL = "SELECT UsageDuration FROM Uses WHERE UserID = ? AND DeviceID = ? AND UsageDate = ?";
             try (PreparedStatement checkStmt = connection.prepareStatement(selectSQL)) {
-                checkStmt.setString(1, userID);
+                checkStmt.setString(1, userUpdateID);
                 checkStmt.setString(2, deviceID);
                 checkStmt.setString(3, usageDate);
 
@@ -75,7 +70,7 @@ public class UserUsesAddUpdateServlet extends HttpServlet {
                         String updateSQL = "UPDATE Uses SET UsageDuration = UsageDuration + ? WHERE UserID = ? AND DeviceID = ? AND UsageDate = ?";
                         try (PreparedStatement updateStmt = connection.prepareStatement(updateSQL)) {
                             updateStmt.setString(1, usageDuration);
-                            updateStmt.setString(2, userID);
+                            updateStmt.setString(2, userUpdateID);
                             updateStmt.setString(3, deviceID);
                             updateStmt.setString(4, usageDate);
                             updateStmt.executeUpdate();
@@ -86,7 +81,7 @@ public class UserUsesAddUpdateServlet extends HttpServlet {
                     // Insert a new record if no existing record is found
                     String insertSQL = "INSERT INTO Uses (UserID, DeviceID, UsageDate, UsageDuration) VALUES (?, ?, ?, ?)";
                     try (PreparedStatement insertStmt = connection.prepareStatement(insertSQL)) {
-                        insertStmt.setString(1, userID);
+                        insertStmt.setString(1, userUpdateID);
                         insertStmt.setString(2, deviceID);
                         insertStmt.setString(3, usageDate);
                         insertStmt.setString(4, usageDuration);

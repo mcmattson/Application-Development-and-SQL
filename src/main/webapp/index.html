@@ -10,7 +10,7 @@
 
     <div class="section">
         <h2>Search for Users</h2>
-        <div class="flex-container">
+        <div class="flex-container2">
             <input type="text" id="searchInput" placeholder="Enter User Name (optional)">
             <input type="text" id="userID" placeholder="Enter user ID (optional)">
             <input type="date" id="startDate" placeholder="Start Date (optional)">
@@ -22,10 +22,10 @@
 
     <div class="section2">
         <h2>Add New User</h2>
-        <div class="flex-container2">
-            <input type="text" id="newUserID" placeholder="Enter user ID">
-            <input type="text" id="newUserName" placeholder="Enter user name">
-            <input type="text" id="newUserType" placeholder="Enter user type">
+        <div class="flex-container">
+            <input type="text" id="newUserID" placeholder="Enter user ID" required>
+            <input type="text" id="newUserName" placeholder="Enter user name" required>
+            <input type="text" id="newUserType" placeholder="Enter user type" required>
             <button onclick="addUser()">Add User</button>
         </div>
         <div id="addUserResult"></div>
@@ -33,10 +33,10 @@
 
     <div class="section2">
         <h2>Update User</h2>
-        <div class="flex-container2">
-            <input type="text" id="oldUserID" placeholder="Old User ID">
-            <input type="text" id="updateUserName" placeholder="New User Name">
-            <input type="text" id="updateUserType" placeholder="New User Type">
+        <div class="flex-container">
+            <input type="text" id="oldUserID" placeholder="Old User ID" required>
+            <input type="text" id="updateUserName" placeholder="New User Name" required>
+            <input type="text" id="updateUserType" placeholder="New User Type" required>
             <button onclick="updateUser()">Update User</button>
         </div>
         <div id="updateUserResult"></div>
@@ -44,8 +44,8 @@
 
     <div class="section">
         <h2>Delete User</h2>
-        <div class="flex-container">
-            <input type="text" id="deleteUserID" placeholder="Enter user ID">
+        <div class="flex-container2">
+            <input type="text" id="deleteUserID" placeholder="Enter user ID" required>
             <button onclick="deleteUser()">Delete User</button>
         </div>
         <div id="deleteUserResult"></div>
@@ -53,20 +53,12 @@
     
     <div class="section2">
         <h2>Add/Update Device Uses</h2>
-        <div class="flex-container4">
-            <div class="flex-row">
-            <input type="text" id="userID" placeholder="Enter user ID">
-            <input type="text" id="deviceID" placeholder="Enter Device ID">
-            <input type="text" id="usageDuration" placeholder="Enter Duration Minutes (Max Total 1000 for the Day)">
-            </div>
-            <div class="flex-row">
-            <input type="text" id="usageDateYear" placeholder="Enter Date Year (yyyy)">
-            <input type="text" id="usageDateMonth" placeholder="Enter Date Month (mm)">
-            <input type="text" id="usageDateDay" placeholder="Enter Date Day (dd)">
-            </div>
-            <div class="flex-row button-row">
+        <div class="flex-container">
+            <input type="text" id="userUpdateID" placeholder="Enter user ID" required>
+            <input type="text" id="deviceID" placeholder="Enter Device ID" required>
+            <input type="date" id="usageDate" placeholder="Enter Date" required>
+            <input type="text" id="usageDuration" placeholder="Enter Duration (min)" required>
             <button onclick="addUpdateDeviceUses()">Add Device Uses</button>
-            </div>
         </div>
         <div id="addUpdateDeviceUsesResults"></div>
     </div>
