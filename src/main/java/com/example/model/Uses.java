@@ -1,12 +1,13 @@
 package com.example.model;
 
-public class Uses {
+public class Uses extends User {
 
     private String deviceName;
     private String usageDate; // Changed to String for simplicity
     private int usageDuration;
 
     public Uses(int userId, String userName, String userType, String deviceName, String usageDate, int usageDuration) {
+        super(userId, userName, userType);
         this.deviceName = deviceName;
         this.usageDate = usageDate;
         this.usageDuration = usageDuration;

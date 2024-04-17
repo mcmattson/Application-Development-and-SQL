@@ -46,20 +46,53 @@ function displaySearchResult(data, message = "") {
   searchResultDiv.style.display = "block";
   if (message) {
     searchResultDiv.textContent = message;
-  } else if (data.length === 0) {
-    searchResultDiv.textContent = "No users found.";
-  } else {
-    var userList = document.createElement("ul");
-    data.forEach((user) => {
-      var listItem = document.createElement("li");
-      listItem.textContent = user.userName + " - " + user.userType;
-      userList.appendChild(listItem);
-    });
-    searchResultDiv.appendChild(userList);
+    return;
   }
-}
 
-// ... [rest of the existing app.js functions]
+  if (data.length === 0) {
+    searchResultDiv.textContent = "No users found.";
+    return;
+  }
+
+  // Create table
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const tbody = document.createElement("tbody");
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  searchResultDiv.appendChild(table);
+
+  // Adding headers
+  const headerRow = document.createElement("tr");
+  const headers = [
+    "User ID",
+    "User Name",
+    "User Type",
+    "Device Name",
+    "Usage Date",
+    "Usage Duration",
+  ];
+  headers.forEach((headerText) => {
+    const header = document.createElement("th");
+    header.textContent = headerText;
+    headerRow.appendChild(header);
+  });
+  thead.appendChild(headerRow);
+
+  // Adding data rows
+  data.forEach((user) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+            <td>${user.userId}</td>
+            <td>${user.userName}</td>
+            <td>${user.userType}</td>
+            <td>${user.deviceName}</td>
+            <td>${user.usageDate}</td>
+            <td>${user.usageDuration} minute(s)</td>
+        `;
+    tbody.appendChild(row);
+  });
+}
 
 // ---------//
 function addUser() {

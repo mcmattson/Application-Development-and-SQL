@@ -32,8 +32,6 @@ h1 {
     background-color: #f9f9f9;
 }
 
-
-
 .flex-container {
     display: flex;
     flex-wrap: wrap;
@@ -68,9 +66,7 @@ input {
 .section2 .flex-container2>*,
 .section2 .flex-container3>* {
     flex: 1 1 0px;
-    /* Allow shrink and grow as needed */
     min-width: 0;
-    /* Prevent overflow */
 }
 
 .flex-container input[type="text"] {
@@ -144,6 +140,33 @@ button {
 }
 button:hover {
     background-color: #0056b3;
+}
+
+/* Add styles for the table */
+#searchResult table {
+    width: 100%;
+    background-color: #f9f9f9;
+}
+
+/* Style table headers and data cells */
+#searchResult th,
+#searchResult td {
+    border: 1px solid #ddd;
+    /* Define border for each cell */
+    padding: 8px;
+    text-align: center;
+    /* Align text to the left, change to 'center' if you prefer */
+}
+
+#searchResult tr {
+    background-color: #f2f2f2;
+}
+
+/* Header row style */
+#searchResult th {
+    background-color: #333;
+    color: white;
+    text-align: center;
 }
 
 #userID,
@@ -326,6 +349,25 @@ body.dark-mode input {
 
 body.dark-mode input::placeholder {
     color: #ccc;
+}
+
+body.dark-mode #searchResult table {
+    background-color: #1c1c1c;
+    color: #e0e0e0;
+}
+
+body.dark-mode #searchResult th,
+body.dark-mode #searchResult td {
+    border: 1px solid #444;
+}
+
+body.dark-mode #searchResult tr {
+    background-color: #333;
+}
+
+body.dark-mode #searchResult th {
+    background-color: #222;
+    color: #ddd;
 }
 
 body.dark-mode .modal-content {

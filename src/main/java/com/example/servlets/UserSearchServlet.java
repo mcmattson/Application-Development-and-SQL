@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.example.model.Uses;
 import com.google.gson.Gson;
@@ -31,6 +33,8 @@ public class UserSearchServlet extends HttpServlet {
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
         List<Uses> searchResult = new ArrayList<>();
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formattedDate = new SimpleDateFormat("MM/dd/yyyy");
 
         try {
             Class.forName(DBConfig.getDriver());
@@ -58,7 +62,7 @@ public class UserSearchServlet extends HttpServlet {
                     int paramIndex = 2;
 
                     if (userID != null && !userID.trim().isEmpty()) {
-                        statement.setInt(paramIndex++, Integer.parseInt(userID));
+                        statement.setString(paramIndex++, userID);
                     }
 
                     if (startDate != null && endDate != null &&
@@ -73,10 +77,11 @@ public class UserSearchServlet extends HttpServlet {
                             String name = resultSet.getString("UserName");
                             String userType = resultSet.getString("UserType");
                             String deviceName = resultSet.getString("DeviceName");
-                            String usageDate = resultSet.getString("UsageDate");
+                            Date usageDate = dbDateFormat.parse(resultSet.getString("UsageDate"));
                             int usageDuration = resultSet.getInt("UsageDuration");
                             searchResult.add(
-                                    new Uses(userId, name, userType, deviceName, usageDate, usageDuration));
+                                    new Uses(userId, name, userType, deviceName,
+                                            formattedDate.format(usageDate), usageDuration));
                         }
                     }
                 }
@@ -88,6 +93,10 @@ public class UserSearchServlet extends HttpServlet {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "An error occurred while processing your request.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "An error occurred while formatting dates.");
         }
 
         Gson gson = new Gson();
