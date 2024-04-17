@@ -9,7 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.example.model.User;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.example.model.Uses;
 import com.google.gson.Gson;
 import com.example.util.DBConfig;
 
@@ -26,77 +29,96 @@ public class UserSearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userName = request.getParameter("userName");
-        List<User> searchResult = new ArrayList<>();
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        String userID = request.getParameter("userID");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        List<Uses> searchResult = new ArrayList<>();
+
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formattedDate = new SimpleDateFormat("MM/dd/yyyy");
+
+        int page = Integer.parseInt(request.getParameter("page"));
+        final int pageSize = 25; // Set the page size for pagination
+        int offset = (page - 1) * pageSize;
 
         try {
             Class.forName(DBConfig.getDriver());
+            try (Connection connection = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUsername(),
+                    DBConfig.getPassword())) {
+
+                // Create Request depending on user entry
+                String sql = "SELECT u.UserID, u.UserName, u.UserType, d.DeviceName, us.UsageDate, us.UsageDuration " +
+                        "FROM Users u " +
+                        "LEFT JOIN Uses us ON u.UserID = us.UserID " +
+                        "LEFT JOIN Devices d ON us.DeviceID = d.DeviceID " +
+                        "WHERE u.UserName LIKE ?";
+
+                if (userID != null && !userID.trim().isEmpty()) {
+                    sql += "AND u.UserID = ?";
+                }
+
+                if (startDate != null && endDate != null &&
+                        !startDate.trim().isEmpty() && !endDate.trim().isEmpty()) {
+                    sql += "AND us.UsageDate BETWEEN ? AND ?";
+                }
+                sql += "LIMIT ? OFFSET ?";
+
+                // Prepare Final Request
+                try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                    statement.setString(1, "%" + userName + "%");
+
+                    int paramIndex = 2;
+
+                    if (userID != null && !userID.trim().isEmpty()) {
+                        statement.setString(paramIndex++, userID);
+                    }
+
+                    if (startDate != null && endDate != null &&
+                            !startDate.trim().isEmpty() && !endDate.trim().isEmpty()) {
+                        statement.setString(paramIndex++, startDate);
+                        statement.setString(paramIndex++, endDate);
+                    }
+
+                    statement.setInt(paramIndex++, pageSize);
+                    statement.setInt(paramIndex, offset);
+
+                    // Return results to frontend
+                    try (ResultSet resultSet = statement.executeQuery()) {
+                        while (resultSet.next()) {
+                            int userId = resultSet.getInt("UserID");
+                            String name = resultSet.getString("UserName");
+                            String userType = resultSet.getString("UserType");
+                            String deviceName = resultSet.getString("DeviceName");
+                            Date usageDate = dbDateFormat.parse(resultSet.getString("UsageDate"));
+                            int usageDuration = resultSet.getInt("UsageDuration");
+                            searchResult.add(
+                                    new Uses(userId, name, userType, deviceName,
+                                            formattedDate.format(usageDate), usageDuration));
+                        }
+                    }
+                }
+            }
         } catch (ClassNotFoundException e) {
             System.err.println("Driver Error");
             e.printStackTrace();
-        }
-
-        try {
-            // Establish database connection
-            connection = DriverManager.getConnection(DBConfig.getUrl(), DBConfig.getUsername(),
-                    DBConfig.getPassword());
-
-            // Prepare SQL statement
-            String sql = "SELECT * FROM Users WHERE UserName LIKE ?";
-            statement = connection.prepareStatement(sql);
-            statement.setString(1, "%" + userName + "%");
-
-            // Execute query
-            resultSet = statement.executeQuery();
-
-            // Process result set
-            while (resultSet.next()) {
-                int userId = resultSet.getInt("UserID");
-                String name = resultSet.getString("UserName");
-                String userType = resultSet.getString("UserType");
-                System.out.println(" Student ID: " + userId + "\n Student Name: " + name + "\n Dept Name: "
-                        + userType);
-                // Create User object and add to search result
-                User user = new User(userId, name, userType);
-                searchResult.add(user);
-            }
         } catch (SQLException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "An error occurred while processing your request.");
-
-        } finally {
-            // Close resources
-            try {
-                if (resultSet != null)
-                    resultSet.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (statement != null)
-                    statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "An error occurred while formatting dates.");
         }
 
-        // Convert searchResult to JSON and send as response
         Gson gson = new Gson();
         String jsonResult = gson.toJson(searchResult);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.print(jsonResult);
-        out.flush();
+        try (PrintWriter out = response.getWriter()) {
+            out.print(jsonResult);
+            out.flush();
+        }
     }
 }

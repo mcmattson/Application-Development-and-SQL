@@ -1,21 +1,32 @@
-var searchResultDiv = document.getElementById("searchResult");
-var addUserResultDiv = document.getElementById("addUserResult");
-var deleteUserResultDiv = document.getElementById("deleteUserResult");
-var updateUserResultDiv = document.getElementById("updateUserResult");
-var addUpdateDeviceUsesResultsDiv = document.getElementById(
+let searchResultDiv = document.getElementById("searchResult");
+let addUserResultDiv = document.getElementById("addUserResult");
+let deleteUserResultDiv = document.getElementById("deleteUserResult");
+let updateUserResultDiv = document.getElementById("updateUserResult");
+let addUpdateDeviceUsesResultsDiv = document.getElementById(
   "addUpdateDeviceUsesResults"
 );
+let currentPage = 1;
 
-function searchUsers() {
-  var searchInput = document.getElementById("searchInput").value.trim();
+function searchUsers(page = 1) {
+  let searchInput = document.getElementById("searchInput").value.trim();
+  let userID = document.getElementById("userID").value.trim();
+  let startDate = document.getElementById("startDate").value.trim();
+  let endDate = document.getElementById("endDate").value.trim();
 
   clearAllResults();
-  if (searchInput === "") {
-    displaySearchResult([], "Please Enter the User Name to Search for.");
-    return;
+
+  // Construct the URL with query parameters for user name, user ID, and date range
+  let url = "/user-management/search?userName=" + searchInput;
+  if (userID) {
+    url += "&userID=" + userID;
+  }
+  if (startDate && endDate) {
+    url += "&startDate=" + startDate + "&endDate=" + endDate;
   }
 
-  fetch("/user-management/search?userName=" + searchInput)
+  url += "&page=" + page;
+  // Use the constructed URL to perform the search
+  fetch(url)
     .then((response) => {
       if (!response.ok) {
         displaySearchResult([], "ERROR: Network error occurred");
@@ -24,9 +35,14 @@ function searchUsers() {
       return response.json();
     })
     .then((data) => {
+      currentPage = page;
       displaySearchResult(data);
+      createPaginationControls(data.length < 25);
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error(error);
+      displaySearchResult([], "ERROR: An error occurred while fetching data");
+    });
 }
 
 function displaySearchResult(data, message = "") {
@@ -34,23 +50,59 @@ function displaySearchResult(data, message = "") {
   searchResultDiv.style.display = "block";
   if (message) {
     searchResultDiv.textContent = message;
-  } else if (data.length === 0) {
-    searchResultDiv.textContent = "No users found.";
-  } else {
-    var userList = document.createElement("ul");
-    data.forEach((user) => {
-      var listItem = document.createElement("li");
-      listItem.textContent = user.userName + " - " + user.userType;
-      userList.appendChild(listItem);
-    });
-    searchResultDiv.appendChild(userList);
+    return;
   }
+
+  if (data.length === 0) {
+    searchResultDiv.textContent = "No Users or Device Uses found.";
+    return;
+  }
+
+  // Create table
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const tbody = document.createElement("tbody");
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  searchResultDiv.appendChild(table);
+
+  // Adding headers
+  const headerRow = document.createElement("tr");
+  const headers = [
+    "User ID",
+    "User Name",
+    "User Type",
+    "Device Name",
+    "Usage Date",
+    "Usage Duration",
+  ];
+  headers.forEach((headerText) => {
+    const header = document.createElement("th");
+    header.textContent = headerText;
+    headerRow.appendChild(header);
+  });
+  thead.appendChild(headerRow);
+
+  // Adding data rows
+  data.forEach((user) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+            <td>${user.userId}</td>
+            <td>${user.userName}</td>
+            <td>${user.userType}</td>
+            <td>${user.deviceName}</td>
+            <td>${user.usageDate}</td>
+            <td>${user.usageDuration} minute(s)</td>
+        `;
+    tbody.appendChild(row);
+  });
 }
+
 // ---------//
 function addUser() {
-  var newUserID = document.getElementById("newUserID").value.trim();
-  var newUserName = document.getElementById("newUserName").value.trim();
-  var newUserType = document.getElementById("newUserType").value.trim();
+  let newUserID = document.getElementById("newUserID").value.trim();
+  let newUserName = document.getElementById("newUserName").value.trim();
+  let newUserType = document.getElementById("newUserType").value.trim();
 
   clearAllResults();
 
@@ -110,9 +162,9 @@ function displayAddUserResult(message) {
 
 // ---------//
 function updateUser() {
-  var oldUserID = document.getElementById("oldUserID").value.trim();
-  var updateUserName = document.getElementById("updateUserName").value.trim();
-  var updateUserType = document.getElementById("updateUserType").value.trim();
+  let oldUserID = document.getElementById("oldUserID").value.trim();
+  let updateUserName = document.getElementById("updateUserName").value.trim();
+  let updateUserType = document.getElementById("updateUserType").value.trim();
 
   clearAllResults();
   if (oldUserID === "") {
@@ -171,16 +223,16 @@ function displayUpdateUserResult(message) {
 
 // ----- //
 function deleteUser() {
-  var deleteUserID = document.getElementById("deleteUserID").value.trim();
+  let deleteUserID = document.getElementById("deleteUserID").value.trim();
   if (!deleteUserID) {
     displayDeleteResult("Please Enter the User ID.");
     return;
   }
 
-  var modal = document.getElementById("deleteConfirmationModal");
+  let modal = document.getElementById("deleteConfirmationModal");
   modal.style.display = "block";
-  var cancelBtn = document.getElementById("cancelDelete");
-  var confirmBtn = document.getElementById("confirmDelete");
+  let cancelBtn = document.getElementById("cancelDelete");
+  let confirmBtn = document.getElementById("confirmDelete");
 
   cancelBtn.onclick = function () {
     modal.style.display = "none";
@@ -223,12 +275,12 @@ function displayDeleteResult(message) {
 }
 
 function addUpdateDeviceUses() {
-  var userID = document.getElementById("userID").value.trim();
-  var deviceID = document.getElementById("deviceID").value.trim();
-  var usageDateYear = document.getElementById("usageDateYear").value.trim();
-  var usageDateMonth = document.getElementById("usageDateMonth").value.trim();
-  var usageDateDay = document.getElementById("usageDateDay").value.trim();
-  var usageDuration = document.getElementById("usageDuration").value.trim();
+  let userID = document.getElementById("userID").value.trim();
+  let deviceID = document.getElementById("deviceID").value.trim();
+  let usageDateYear = document.getElementById("usageDateYear").value.trim();
+  let usageDateMonth = document.getElementById("usageDateMonth").value.trim();
+  let usageDateDay = document.getElementById("usageDateDay").value.trim();
+  let usageDuration = document.getElementById("usageDuration").value.trim();
 
   clearAllResults();
 
@@ -305,7 +357,45 @@ function displayUsesResult(message) {
   }
 }
 
+function createPaginationControls(isLastPage) {
+  const paginationDiv =
+    document.getElementById("paginationControls") ||
+    document.createElement("div");
+  paginationDiv.id = "paginationControls";
+  paginationDiv.innerHTML = "";
+
+  if (currentPage > 1) {
+    const prevButton = document.createElement("button");
+    prevButton.textContent = "Previous";
+    prevButton.classList.add("pagination-prev");
+    prevButton.onclick = () => {
+      searchResultDiv.innerHTML = "";
+      searchUsers(currentPage - 1);
+    };
+    paginationDiv.appendChild(prevButton);
+  }
+
+  if (!isLastPage) {
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    nextButton.classList.add("pagination-next");
+    nextButton.onclick = () => {
+      searchResultDiv.innerHTML = "";
+      searchUsers(currentPage + 1);
+    };
+    paginationDiv.appendChild(nextButton);
+  }
+
+  searchResultDiv.appendChild(paginationDiv);
+}
+
 function clearAllResults() {
+  searchResultDiv.innerHTML = ""; // Clear search results
+  const paginationDiv = document.getElementById("paginationControls");
+  if (paginationDiv) {
+    paginationDiv.innerHTML = ""; // Clear pagination controls
+  }
+
   const resultDivs = [
     searchResultDiv,
     addUserResultDiv,
@@ -320,7 +410,7 @@ function clearAllResults() {
 }
 
 function toggleDarkMode() {
-  const body = document.body;
+  const { body } = document;
   body.classList.toggle("dark-mode");
   localStorage.setItem("darkMode", body.classList.contains("dark-mode"));
 }

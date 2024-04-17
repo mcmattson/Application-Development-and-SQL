@@ -32,8 +32,6 @@ h1 {
     background-color: #f9f9f9;
 }
 
-
-
 .flex-container {
     display: flex;
     flex-wrap: wrap;
@@ -68,9 +66,7 @@ input {
 .section2 .flex-container2>*,
 .section2 .flex-container3>* {
     flex: 1 1 0px;
-    /* Allow shrink and grow as needed */
     min-width: 0;
-    /* Prevent overflow */
 }
 
 .flex-container input[type="text"] {
@@ -126,12 +122,10 @@ button {
 .flex-container4 input[type="text"] {
     flex: 1;
     margin-right: 10px;
-    /* Spacing between inputs */
 }
 
 .flex-container4 .flex-row:last-child input[type="text"] {
     margin-right: 0;
-    /* No margin for the last input */
 }
 
 .flex-container4 button {
@@ -144,6 +138,29 @@ button {
 }
 button:hover {
     background-color: #0056b3;
+}
+
+/* Add styles for the table */
+#searchResult table {
+    width: 100%;
+    background-color: #f9f9f9;
+}
+
+#searchResult th,
+#searchResult td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#searchResult tr {
+    background-color: #f2f2f2;
+}
+
+#searchResult th {
+    background-color: #333;
+    color: white;
+    text-align: center;
 }
 
 #userID,
@@ -207,6 +224,8 @@ button:hover {
     background-color: #e6e6e6;
 }
 
+/* CONFIRM POPUP */
+
 .modal {
     display: none;
     position: fixed;
@@ -268,6 +287,7 @@ button:hover {
     font-size: 16px;
 }
 
+
 #confirmDelete {
     background-color: #d32f2f;
 }
@@ -280,6 +300,31 @@ button:hover {
 #confirmDelete:hover {
     background-color: #b71c1c;
 }
+
+/* PAGINATION SEARCH */
+
+#paginationControls {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.pagination-prev {
+    margin-right: auto;
+    width: 25%;
+}
+
+.pagination-next {
+    margin-left: auto;
+    width: 25%;
+}
+
+#paginationControls button:only-child {
+    margin-left: auto;
+}
+
+/* DARK-MODE */
 
 body.dark-mode {
     background-color: #121212;
@@ -326,6 +371,25 @@ body.dark-mode input {
 
 body.dark-mode input::placeholder {
     color: #ccc;
+}
+
+body.dark-mode #searchResult table {
+    background-color: #1c1c1c;
+    color: #e0e0e0;
+}
+
+body.dark-mode #searchResult th,
+body.dark-mode #searchResult td {
+    border: 1px solid #444;
+}
+
+body.dark-mode #searchResult tr {
+    background-color: #333;
+}
+
+body.dark-mode #searchResult th {
+    background-color: #222;
+    color: #ddd;
 }
 
 body.dark-mode .modal-content {
