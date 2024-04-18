@@ -2,7 +2,7 @@
 
   
 
-## OBTAIN THE APPLICATION/MODIFY SERVER INFO
+### OBTAIN THE APPLICATION/MODIFY SERVER INFO
 
   
 
@@ -12,7 +12,7 @@
 
   
 
-## COMPILING THE PROJECT USING MAVEN
+### COMPILING THE PROJECT USING MAVEN
 
 4. Open cmd from the start menu or search bar
 
@@ -23,7 +23,7 @@
 
   
 
-## RUNNING THE APPLICATION ON A TOMCAT SERVER
+### RUNNING THE APPLICATION ON A TOMCAT SERVER
 
 6. Follow the Steps to set up your Tomcat server locally and run the server.
 
