@@ -7,8 +7,7 @@
   
 
  1. Download and extract the User_Manager.zip folder on to your desktop.
- 2. Navigate to the `/src/main/webapp/WEB-INF/classes/db.properties`
- *insert the database, username, password to the required database connection information.*
+ 2. Navigate to the `/src/main/webapp/WEB-INF/classes/db.properties` and change the database information.
 
   
 
