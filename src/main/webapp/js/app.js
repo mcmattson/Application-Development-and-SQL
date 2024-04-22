@@ -107,8 +107,8 @@ function addUser() {
 
   clearAllResults();
 
-  if (!newUserID) {
-    displayAddUserResult("Please Enter the User ID.");
+  if (!newUserID || !Number.isInteger(Number(newUserID))) {
+    displayAddUserResult("Please Enter a valid User ID.");
     return;
   }
 
@@ -117,9 +117,10 @@ function addUser() {
     return;
   }
 
-  if (!newUserType) {
+  const allowedTypes = ["Administrator", "Visitor", "Regular"];
+  if (!allowedTypes.includes(newUserType)) {
     displayAddUserResult(
-      "Please enter Administrator, Visitor, or Regular for User Type."
+      "Please enter a valid User Type: Administrator, Visitor, or Regular."
     );
     return;
   }
@@ -168,19 +169,22 @@ function updateUser() {
   let updateUserType = document.getElementById("updateUserType").value.trim();
 
   clearAllResults();
-  if (!oldUserID) {
-    displayUpdateUserResult("Please Enter the User ID.");
-    return;
-  }
+ if (!oldUserID || !Number.isInteger(Number(oldUserID))) {
+   displayUpdateUserResult(
+     "Please Enter a valid User ID."
+   );
+   return;
+ }
 
   if (!updateUserName) {
     displayUpdateUserResult("Please Enter the User Name.");
     return;
   }
 
-  if (!updateUserType) {
+  const allowedTypes = ["Administrator", "Visitor", "Regular"];
+  if (!allowedTypes.includes(updateUserType)) {
     displayUpdateUserResult(
-      "Please enter Administrator, Visitor, or Regular for User Type."
+      "Please enter a valid User Type: Administrator, Visitor, or Regular."
     );
     return;
   }
