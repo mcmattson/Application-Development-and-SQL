@@ -2,11 +2,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management System</title>
-    <link rel="stylesheet" href="css/styles.css"> <!-- Add this line -->
+    <link rel="stylesheet" href="css/styles.css"> 
 </head>
 
 <body>
-    <h1>User Management System</h1>
+    <div class="body-container">
+        <div class="title-container">
+            <h1>User Management System</h1>
+            <div class="dark-mode-toggle">
+                <span>Light/Dark</span>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+    </div>    
 
     <div class="section">
         <h2>Search for Users</h2>
@@ -62,10 +73,10 @@
         </div>
         <div id="addUpdateDeviceUsesResults"></div>
     </div>
-
-    <div class="flex-container"><button onclick="toggleDarkMode()">Toggle Dark Mode</button></div>
     <script src="js/app.js"></script>
+    
 </body>
+
 
 <div id="deleteConfirmationModal" class="modal">
     <div class="modal-content">
