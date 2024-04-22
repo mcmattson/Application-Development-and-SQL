@@ -7,6 +7,12 @@ let addUpdateDeviceUsesResultsDiv = document.getElementById(
 );
 let currentPage = 1;
 
+/**
+ * Searches for users based on input criteria and pagination, displaying results and pagination controls.
+ * Retrieves user search input, filters by user ID, start and end dates, fetches data from the server, and handles pagination.
+ * @function
+ * @param {number} [page=1] - The page number for pagination, defaults to the first page.
+ */
 function searchUsers(page = 1) {
   let searchInput = document.getElementById("searchInput").value.trim();
   let userID = document.getElementById("userID").value.trim();
@@ -49,6 +55,13 @@ function searchUsers(page = 1) {
     });
 }
 
+/**
+ * Displays search results in a formatted table based on the provided data or message.
+ * Clears existing results, displays a message if provided, or populates a table with user and device usage data.
+ * @function
+ * @param {Array} data - The array of objects containing user and device usage data.
+ * @param {string} [message=""] - Optional message to display if no data is provided.
+ */
 function displaySearchResult(data, message = "") {
   clearAllResults();
   searchResultDiv.style.display = "block";
@@ -99,7 +112,11 @@ function displaySearchResult(data, message = "") {
   });
 }
 
-// ---------//
+/**
+ * Adds a new user after validating inputs and making a POST request to the server.
+ * Validates user ID, user name, and user type before sending a POST request to add a new user.
+ * @function
+ */
 function addUser() {
   let newUserID = document.getElementById("newUserID").value.trim();
   let newUserName = document.getElementById("newUserName").value.trim();
@@ -152,6 +169,12 @@ function addUser() {
     .catch((error) => console.error(error));
 }
 
+/**
+ * Displays the result message for adding a user, showing or hiding the message based on input.
+ * Clears existing results, sets the message content, and adjusts the display style of the result div.
+ * @function
+ * @param {string} message - The message to display for the result of adding a user.
+ */
 function displayAddUserResult(message) {
   clearAllResults();
   if (message) {
@@ -162,7 +185,11 @@ function displayAddUserResult(message) {
   }
 }
 
-// ---------//
+/**
+ * Updates user information after validating inputs and making a PUT request to the server.
+ * Validates user ID, user name, and user type before sending a PUT request to update user details.
+ * @function
+ */
 function updateUser() {
   let oldUserID = document.getElementById("oldUserID").value.trim();
   let updateUserName = document.getElementById("updateUserName").value.trim();
@@ -214,6 +241,12 @@ function updateUser() {
     .catch((error) => console.error(error));
 }
 
+/**
+ * Displays the result message for updating a user, showing or hiding the message based on input.
+ * Clears existing results, sets the message content, and adjusts the display style of the result div.
+ * @function
+ * @param {string} message - The message to display for the result of updating a user.
+ */
 function displayUpdateUserResult(message) {
   clearAllResults();
   if (message) {
@@ -224,7 +257,11 @@ function displayUpdateUserResult(message) {
   }
 }
 
-// ----- //
+/**
+ * Deletes a user after confirmation.
+ * Validates the user ID, displays a confirmation modal, and handles cancellation or confirmation of deletion.
+ * @function
+ */
 function deleteUser() {
   let deleteUserID = document.getElementById("deleteUserID").value.trim();
   if (!deleteUserID || !Number.isInteger(Number(deleteUserID))) {
@@ -248,6 +285,12 @@ function deleteUser() {
   };
 }
 
+/**
+ * Proceeds with deleting a user by sending a DELETE request to the server and handling the response.
+ * Initiates a DELETE request with the user ID to delete, processes the response data, and displays the result.
+ * @function
+ * @param {string} deleteUserID - The ID of the user to be deleted.
+ */
 function proceedToDelete(deleteUserID) {
   fetch(`/user-management/deleteUser?userID=${deleteUserID}`, {
     method: "DELETE",
@@ -267,6 +310,12 @@ function proceedToDelete(deleteUserID) {
     });
 }
 
+/**
+ * Displays the result message for deleting a user, showing or hiding the message based on input.
+ * Clears existing results, sets the message content, and adjusts the display style of the result div.
+ * @function
+ * @param {string} message - The message to display for the result of deleting a user.
+ */
 function displayDeleteResult(message) {
   clearAllResults();
   if (message) {
@@ -277,6 +326,11 @@ function displayDeleteResult(message) {
   }
 }
 
+/**
+ * Adds or updates device usage information after validating inputs and making a POST request to the server.
+ * Validates user ID, device ID, usage date, and duration before sending a POST request to add or update device usage.
+ * @function
+ */
 function addUpdateDeviceUses() {
   let userUpdateID = document.getElementById("userUpdateID").value.trim();
   let deviceID = document.getElementById("deviceID").value.trim();
@@ -335,6 +389,12 @@ function addUpdateDeviceUses() {
     });
 }
 
+/**
+ * Displays the result message for adding or updating device uses, showing or hiding the message based on input.
+ * Clears existing results, sets the message content, and adjusts the display style of the result div.
+ * @function
+ * @param {string} message - The message to display for the result of adding or updating device uses.
+ */
 function displayUsesResult(message) {
   clearAllResults();
   if (message) {
@@ -377,6 +437,11 @@ function createPaginationControls(isLastPage) {
   searchResultDiv.appendChild(paginationDiv);
 }
 
+/**
+ * Clears all result divs and pagination controls, resetting their content and hiding them.
+ * Clears the content of search result div, pagination controls, and other result divs, hiding them from view.
+ * @function
+ */
 function clearAllResults() {
   searchResultDiv.innerHTML = "";
   const paginationDiv = document.getElementById("paginationControls");
@@ -397,6 +462,11 @@ function clearAllResults() {
   });
 }
 
+/**
+ * Applies the initial theme based on the stored preference in local storage.
+ * Checks if the dark mode preference is stored in local storage and applies the "dark-mode" class to the body if set to true.
+ * @function
+ */
 function applyInitialTheme() {
   const darkMode = localStorage.getItem("darkMode") === "true";
   if (darkMode) {
@@ -416,6 +486,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+/**
+ * Displays a message in the specified element, showing or hiding the element based on the message content.
+ * Clears the element's existing content, sets the message text, and adjusts the display style of the element.
+ * @function
+ * @param {string} elementId - The ID of the HTML element where the message will be displayed.
+ * @param {string} message - The message to display in the specified element.
+ */
 function displayMessage(elementId, message) {
   const element = document.getElementById(elementId);
   element.innerHTML = "";
