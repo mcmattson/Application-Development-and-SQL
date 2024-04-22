@@ -229,8 +229,8 @@ function displayUpdateUserResult(message) {
 // ----- //
 function deleteUser() {
   let deleteUserID = document.getElementById("deleteUserID").value.trim();
-  if (!deleteUserID) {
-    displayDeleteResult("Please Enter the User ID.");
+  if (!deleteUserID || !Number.isInteger(Number(deleteUserID))) {
+    displayDeleteResult("Please Enter a valid User ID.");
     return;
   }
 
@@ -287,13 +287,13 @@ function addUpdateDeviceUses() {
 
   clearAllResults();
 
-  if (!userUpdateID) {
-    displayUsesResult("Please Enter the User ID.");
+  if (!userUpdateID || !Number.isInteger(Number(userUpdateID))) {
+    displayUsesResult("Please Enter a valid User ID.");
     return;
   }
 
-  if (!deviceID) {
-    displayUsesResult("Please Enter the Device ID.");
+  if (!deviceID || !Number.isInteger(Number(deviceID))) {
+    displayUsesResult("Please Enter a valid Device ID.");
     return;
   }
 
@@ -302,7 +302,7 @@ function addUpdateDeviceUses() {
     return;
   }
 
-  if (!usageDuration) {
+  if (!usageDuration || !Number.isInteger(Number(usageDuration))) {
     displayUsesResult("Please enter Duration in Minutes.");
     return;
   }
