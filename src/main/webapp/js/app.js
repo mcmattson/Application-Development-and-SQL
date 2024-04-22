@@ -19,8 +19,14 @@ function searchUsers(page = 1) {
   if (userID) {
     url += "&userID=" + userID;
   }
-  if (startDate && endDate) {
-    url += "&startDate=" + startDate + "&endDate=" + endDate;
+  if (startDate || endDate) {
+    if (startDate && endDate == "") {
+      url += "&startDate=" + startDate + "&endDate=" + "3000-01-01";
+    } else if (startDate == "" && endDate) {
+      url += "&startDate=" + "1900-01-01" + "&endDate=" + endDate;
+    } else {
+      return;
+    }
   }
   url += "&page=" + page;
 
