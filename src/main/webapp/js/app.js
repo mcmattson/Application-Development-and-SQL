@@ -141,7 +141,7 @@ function addUser() {
   )
     .then((response) => {
       if (!response.ok) {
-        displayAddUserResult("ERROR: Network error occurred");
+        displayAddUserResult("ERROR: User Already Exists.");
         throw new Error("Network error occurred");
       }
       return response.json();
@@ -169,12 +169,10 @@ function updateUser() {
   let updateUserType = document.getElementById("updateUserType").value.trim();
 
   clearAllResults();
- if (!oldUserID || !Number.isInteger(Number(oldUserID))) {
-   displayUpdateUserResult(
-     "Please Enter a valid User ID."
-   );
-   return;
- }
+  if (!oldUserID || !Number.isInteger(Number(oldUserID))) {
+    displayUpdateUserResult("Please Enter a valid User ID.");
+    return;
+  }
 
   if (!updateUserName) {
     displayUpdateUserResult("Please Enter the User Name.");
@@ -324,7 +322,7 @@ function addUpdateDeviceUses() {
   )
     .then((response) => {
       if (!response.ok) {
-        displayUsesResult("ERROR: Network error occurred");
+        displayUsesResult("ERROR: No User Found.");
         throw new Error("Network error occurred");
       }
       return response.json();
@@ -334,7 +332,6 @@ function addUpdateDeviceUses() {
     })
     .catch((error) => {
       console.error("Error:", error);
-      displayUsesResult("Network error occurred: " + error.message);
     });
 }
 
