@@ -58,16 +58,11 @@ public class UserAddServlet extends HttpServlet {
             }
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            String errorMessage = "An unexpected error occurred.";
-            if (e.getErrorCode() == 1062) {
-                errorMessage = "ERROR: " + userID + " has already been entered.";
-            }
             try (PrintWriter out = response.getWriter()) {
-                out.print(new Gson().toJson(errorMessage));
+                out.print(new Gson().toJson("An error occurred while processing your request: " + e.getMessage()));
                 out.flush();
             }
         } catch (Exception e) {
-            log("General Error: ", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             try (PrintWriter out = response.getWriter()) {
                 out.print(new Gson().toJson("An unexpected error occurred: " + e.getMessage()));

@@ -377,10 +377,10 @@ function createPaginationControls(isLastPage) {
 }
 
 function clearAllResults() {
-  searchResultDiv.innerHTML = ""; // Clear search results
+  searchResultDiv.innerHTML = "";
   const paginationDiv = document.getElementById("paginationControls");
   if (paginationDiv) {
-    paginationDiv.innerHTML = ""; // Clear pagination controls
+    paginationDiv.innerHTML = "";
   }
 
   const resultDivs = [
@@ -396,12 +396,6 @@ function clearAllResults() {
   });
 }
 
-function toggleDarkMode() {
-  const { body } = document;
-  body.classList.toggle("dark-mode");
-  localStorage.setItem("darkMode", body.classList.contains("dark-mode"));
-}
-
 function applyInitialTheme() {
   const darkMode = localStorage.getItem("darkMode") === "true";
   if (darkMode) {
@@ -409,7 +403,17 @@ function applyInitialTheme() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", applyInitialTheme);
+document.addEventListener("DOMContentLoaded", function () {
+  applyInitialTheme();
+
+  let toggleSwitch = document.getElementById("darkModeToggle");
+  toggleSwitch.checked = localStorage.getItem("darkMode") === "true";
+
+  toggleSwitch.addEventListener("change", function () {
+    document.body.classList.toggle("dark-mode", this.checked);
+    localStorage.setItem("darkMode", this.checked);
+  });
+});
 
 function displayMessage(elementId, message) {
   const element = document.getElementById(elementId);
